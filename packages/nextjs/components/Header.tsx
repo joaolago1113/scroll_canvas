@@ -7,7 +7,14 @@ import { usePathname } from "next/navigation";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { useEffect, Fragment } from 'react';
 
+import { useAccount } from "wagmi";
+import { useScaffoldContract } from "~~/hooks/scaffold-eth";
+import { getTargetNetworks } from "~~/utils/scaffold-eth";
+import { Address } from "viem";
+import { formatEther } from "viem";
 
 type HeaderMenuLink = {
   label: string;
@@ -58,12 +65,35 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
+  const { address } = useAccount();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
   );
+
+  const { data: paintTokenBalance } = useScaffoldReadContract<"PaintToken", "balanceOf">({
+    contractName: "PaintToken",
+    functionName: "balanceOf",
+    args: [address as Address],
+  });
+
+  const { data: paintTokenTotalSupply } = useScaffoldReadContract<"PaintToken", "totalSupply">({
+    contractName: "PaintToken",
+    functionName: "totalSupply",
+    // Remove the args property since totalSupply doesn't take any arguments
+  });
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  }, [isDrawerOpen]);
+
+  const targetNetwork = getTargetNetworks();
 
   return (
     <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
@@ -104,8 +134,16 @@ export const Header = () => {
         </ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
-        <RainbowKitCustomConnectButton />
-        <FaucetButton />
+        <div className="flex items-center gap-2">
+          <RainbowKitCustomConnectButton />
+          <FaucetButton />
+        </div>
+        {address && (
+          <div className="flex flex-col items-end ml-1">
+            <div className="font-bold">Your Paint Tokens: {paintTokenBalance?.toString()}</div>
+            <div className="text-sm">Total Supply: {paintTokenTotalSupply ? formatEther(paintTokenTotalSupply) : "..."}</div>
+          </div>
+        )}
       </div>
     </div>
   );

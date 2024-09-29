@@ -1,6 +1,5 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { Contract } from "ethers";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -8,34 +7,29 @@ import { Contract } from "ethers";
  *
  * @param hre HardhatRuntimeEnvironment object.
  */
-const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  /*
-    On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
+const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+  const { getNamedAccounts, deployments } = hre;
+  const { deploy } = deployments;
+  const { deployer } = await getNamedAccounts();
 
-    When deploying to live networks (e.g `yarn deploy --network sepolia`), the deployer account
-    should have sufficient balance to pay for the gas fees for contract creation.
+  const PAINT_TOKEN_SUPPLY = "10000000000000000000000000"; // 10,000,000 tokens with 18 decimals
 
-    You can generate a random account with `yarn generate` which will fill DEPLOYER_PRIVATE_KEY
-    with a random private key in the .env file (then used on hardhat.config.ts)
-    You can run the `yarn account` command to check your balance in every network.
-  */
-  const { deployer } = await hre.getNamedAccounts();
-  const { deploy } = hre.deployments;
-
-  await deploy("CollaborativeArtCanvas", {
+  // Deploy the CollaborativeArtCanvas contract first
+  const collaborativeArtCanvas = await deploy("CollaborativeArtCanvas", {
     from: deployer,
-    // Contract constructor arguments
-    args: [deployer],
+    args: [deployer], // Pass the deployer address as the initial owner
     log: true,
     autoMine: true,
   });
 
-  // Removed the unused variable to fix linting error
-  // const yourContract = await hre.ethers.getContract<Contract>("CollaborativeArtCanvas", deployer);
+  // Deploy the PaintToken contract, passing the CollaborativeArtCanvas address as the constructor argument
+  await deploy("PaintToken", {
+    from: deployer,
+    args: [PAINT_TOKEN_SUPPLY, collaborativeArtCanvas.address], // Pass the initial supply and the CollaborativeArtCanvas address
+    log: true,
+    autoMine: true,
+  });
 };
 
-export default deployYourContract;
-
-// Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["CollaborativeArtCanvas"];
+export default func;
+func.tags = ["CollaborativeArtCanvas", "PaintToken"];

@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { useScaffoldReadContract } from '~~/hooks/scaffold-eth';
+import React, { useMemo } from "react";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 interface CanvasProps {
   onPixelClick: (pixelId: number) => void;
@@ -11,13 +11,13 @@ const CANVAS_SIZE = 64; // Ensure consistency with page.tsx
 
 export const Canvas: React.FC<CanvasProps> = ({ onPixelClick, setPixels, pixels }) => {
   const { data: canvasWidth } = useScaffoldReadContract({
-    contractName: 'CollaborativeArtCanvas',
-    functionName: 'CANVAS_WIDTH',
+    contractName: "CollaborativeArtCanvas",
+    functionName: "CANVAS_WIDTH",
   });
 
   const { data: canvasHeight } = useScaffoldReadContract({
-    contractName: 'CollaborativeArtCanvas',
-    functionName: 'CANVAS_HEIGHT',
+    contractName: "CollaborativeArtCanvas",
+    functionName: "CANVAS_HEIGHT",
   });
 
   const totalPixels = useMemo(() => {
@@ -31,18 +31,18 @@ export const Canvas: React.FC<CanvasProps> = ({ onPixelClick, setPixels, pixels 
     const elements = [];
     for (let i = 0; i < totalPixels; i++) {
       const pixel = pixels[i];
-      const color = pixel ? `#${pixel.color.toString(16).padStart(6, '0')}` : '#FFFFFF';
+      const color = pixel ? `#${pixel.color.toString(16).padStart(6, "0")}` : "#FFFFFF";
       elements.push(
         <div
           key={i}
           style={{
-            width: '20px',
-            height: '20px',
+            width: "20px",
+            height: "20px",
             backgroundColor: color,
-            cursor: 'pointer',
+            cursor: "pointer",
           }}
           onClick={() => onPixelClick(i)}
-        />
+        />,
       );
     }
     return elements;
@@ -56,10 +56,10 @@ export const Canvas: React.FC<CanvasProps> = ({ onPixelClick, setPixels, pixels 
   return (
     <div
       style={{
-        display: 'grid',
+        display: "grid",
         gridTemplateColumns: `repeat(${canvasWidth}, 20px)`,
-        gap: '1px',
-        border: '1px solid #ccc',
+        gap: "1px",
+        border: "1px solid #ccc",
       }}
     >
       {pixelElements}
