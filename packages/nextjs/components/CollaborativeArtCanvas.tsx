@@ -6,7 +6,7 @@ import { ethers } from "ethers";
 import { AnimatePresence, motion } from "framer-motion";
 import { Eye, Image as ImageIcon, Info, Move, Paintbrush, ShoppingCart, ZoomIn, ZoomOut } from "lucide-react";
 import { Address } from "viem";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import { useScaffoldContract, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { Spinner } from "react-bootstrap";
@@ -14,6 +14,13 @@ import { Spinner } from "react-bootstrap";
 const CANVAS_SIZE = 64;
 const INITIAL_PIXEL_SIZE = 16;
 const TOTAL_PIXELS = CANVAS_SIZE * CANVAS_SIZE;
+
+interface ToolButtonProps {
+  onClick: () => void;
+  isActive: boolean;
+  icon: React.ElementType;
+  label: string;
+}
 
 export default function CollaborativeArtCanvas() {
   const [selectedColor, setSelectedColor] = useState("#FF6B6B");
@@ -45,6 +52,8 @@ export default function CollaborativeArtCanvas() {
     Array.from({ length: CANVAS_SIZE }, () => Array(CANVAS_SIZE).fill("#FFFFFF")),
   );
   const [isLoading, setIsLoading] = useState(true);
+  const [isPainting, setIsPainting] = useState(false); // {{ New state for painting loading }}
+  const [hoveredPixel, setHoveredPixel] = useState<{ x: number; y: number } | null>(null); // {{ New state for hovered pixel }}
 
   const { data: collaborativeArtCanvas } = useScaffoldContract({
     contractName: "CollaborativeArtCanvas",
@@ -81,10 +90,14 @@ export default function CollaborativeArtCanvas() {
   });
 
   const { writeContractAsync: buyPaintTokens } = useScaffoldWriteContract("CollaborativeArtCanvas");
-  const { writeContractAsync: setPixelColors } = useScaffoldWriteContract("CollaborativeArtCanvas");
+  const { writeContractAsync: setPixelColors } = useScaffoldWriteContract("CollaborativeArtCanvas", {
+    mutation: {
+    },
+  });
 
   useEffect(() => {
     if (allPixels !== undefined) {
+      console.log("Updating canvas data");
       const updatedCanvasData = Array.from({ length: CANVAS_SIZE }, (_, y) =>
         Array.from({ length: CANVAS_SIZE }, (_, x) => {
           const pixelId = Number(y * CANVAS_SIZE + x);
@@ -189,11 +202,21 @@ export default function CollaborativeArtCanvas() {
       ctx.fillStyle = "rgba(0, 255, 0, 0.3)";
       ctx.fillRect(x, y, width, height);
     }
+
+    // Draw hovered pixel coordinates
+    if (hoveredPixel) {
+      const { x, y } = hoveredPixel;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+      ctx.fillRect(x * pixelSize + panOffset.x, y * pixelSize + panOffset.y, pixelSize, pixelSize);
+      ctx.fillStyle = "white";
+      ctx.font = "12px Arial";
+      ctx.fillText(`(${x}, ${y})`, x * pixelSize + panOffset.x + 2, y * pixelSize + panOffset.y + 12);
+    }
   };
 
   useEffect(() => {
     drawCanvas();
-  }, [canvasData, pixelSize, panOffset, imageCorners]);
+  }, [canvasData, pixelSize, panOffset, imageCorners, hoveredPixel]);
 
   const paintPixel = (x: number, y: number) => {
     if (x >= 0 && x < CANVAS_SIZE && y >= 0 && y < CANVAS_SIZE) {
@@ -210,17 +233,48 @@ export default function CollaborativeArtCanvas() {
     }
   };
 
-  const handlePixelClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (isImageMode) return;
+  const getPixelCoordinates = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return { x: -1, y: -1 };
 
     const rect = canvas.getBoundingClientRect();
-    const canvasX = event.clientX - rect.left;
-    const canvasY = event.clientY - rect.top;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
 
-    const x = Math.floor((canvasX - panOffset.x) / pixelSize);
-    const y = Math.floor((canvasY - panOffset.y) / pixelSize);
+    const x = Math.floor(((event.clientX - rect.left) * scaleX - panOffset.x) / pixelSize);
+    const y = Math.floor(((event.clientY - rect.top) * scaleY - panOffset.y) / pixelSize);
+
+    return { x, y };
+  };
+
+  const handleCanvasMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    const { x, y } = getPixelCoordinates(event);
+
+    if (isDragging) {
+      setPanOffset({
+        x: event.clientX - startPan.x,
+        y: event.clientY - startPan.y,
+      });
+    } else if (isMouseDown && tool === "brush") {
+      paintPixel(x, y);
+    }
+
+    if (isImageMode) {
+      drawCanvas();
+    }
+
+    // Update hovered pixel coordinates
+    if (x >= 0 && x < CANVAS_SIZE && y >= 0 && y < CANVAS_SIZE) {
+      setHoveredPixel({ x, y });
+    } else {
+      setHoveredPixel(null);
+    }
+  };
+
+  const handlePixelClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (isImageMode) return;
+
+    const { x, y } = getPixelCoordinates(event);
 
     if (x >= 0 && x < CANVAS_SIZE && y >= 0 && y < CANVAS_SIZE) {
       const key = `${x},${y}`;
@@ -253,28 +307,6 @@ export default function CollaborativeArtCanvas() {
       setStartPan({ x: event.clientX - panOffset.x, y: event.clientY - panOffset.y });
     } else if (tool === "brush") {
       handlePixelClick(event);
-    }
-  };
-
-  const handleCanvasMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    if (isDragging) {
-      setPanOffset({
-        x: mouseX - startPan.x,
-        y: mouseY - startPan.y,
-      });
-    } else if (isMouseDown && tool === "brush") {
-      handlePixelClick(event);
-    }
-
-    if (isImageMode) {
-      drawCanvas();
     }
   };
 
@@ -388,30 +420,40 @@ export default function CollaborativeArtCanvas() {
   };
 
   const handlePurchasePixels = async () => {
-    if (selectedPixels.size === 0) return;
+    console.log("handlePurchasePixels called");
+    if (selectedPixels.size === 0) {
+      console.log("No pixels selected");
+      notification.error("Please select at least one pixel to purchase.");
+      return;
+    }
 
     const userBalance = balanceOf ? BigInt(balanceOf) : BigInt(0);
     const requiredTokens = BigInt(selectedPixels.size);
 
+    console.log("User Paint Token balance:", userBalance.toString());
+    console.log("Required Paint Tokens:", requiredTokens.toString());
 
     const decimals = await paintDecimals!;
-    const userBalanceWithDecimals = userBalance / BigInt(10) ** BigInt(decimals);
+    console.log("Decimals:", decimals);
+
+    const userBalanceWithDecimals = userBalance;
     const requiredTokensWithDecimals = requiredTokens * BigInt(10) ** BigInt(decimals);
 
-
-    //alert(`userBalanceWithDecimals: ${userBalanceWithDecimals}, requiredTokensWithDecimals: ${requiredTokensWithDecimals}`);
-
+    console.log("User balance with decimals:", userBalanceWithDecimals.toString());
+    console.log("Required tokens with decimals:", requiredTokensWithDecimals.toString());
 
     if (userBalanceWithDecimals >= requiredTokensWithDecimals) {
-      // User has enough tokens, skip purchase step
+      console.log("User has enough tokens, proceeding to paint");
       setPurchaseStep(2);
     } else {
-      // User needs to buy more tokens
+      console.log("User needs to buy more tokens");
       setPaintTokensToBuy(Number((requiredTokensWithDecimals - userBalanceWithDecimals) / BigInt(10) ** BigInt(decimals)));
       setPurchaseStep(1);
     }
 
     setIsPurchaseModalOpen(true);
+    console.log("Purchase modal state:", isPurchaseModalOpen);
+    console.log("Purchase step:", purchaseStep);
   };
 
   const handleBuyPaintTokens = async () => {
@@ -422,6 +464,7 @@ export default function CollaborativeArtCanvas() {
         value: BigInt(Math.floor(paintTokensToBuy * 0.00003 * 10 ** 18)),
       });
       setPurchaseStep(2);
+      notification.success("Paint tokens purchased successfully!");
     } catch (error: any) {
       console.error(error);
       notification.error(error?.reason || "Failed to buy Paint tokens");
@@ -430,6 +473,7 @@ export default function CollaborativeArtCanvas() {
 
   const handlePaintPixels = async () => {
     try {
+      console.log("handlePaintPixels called");
       const tokenIds = Array.from(selectedPixels).map(key => {
         const [x, y] = key.split(",").map(Number);
         return BigInt(y * CANVAS_SIZE + x);
@@ -440,56 +484,65 @@ export default function CollaborativeArtCanvas() {
         let hexColor = '';
       
         if (colorStr.startsWith('#')) {
-          // Hex format: Remove the '#' and use the remaining string
           hexColor = colorStr.substring(1);
         } else if (colorStr.startsWith('rgb')) {
-          // RGB format: Extract the numeric values and convert to hex
           const rgbValues = colorStr.match(/\d+/g);
           if (rgbValues && rgbValues.length === 3) {
             const [r, g, b] = rgbValues.map(n => parseInt(n, 10));
-            // Ensure values are within 0-255 and convert to hex with padding
             const clamp = (num: number) => Math.max(0, Math.min(255, num));
             const rHex = clamp(r).toString(16).padStart(2, '0');
             const gHex = clamp(g).toString(16).padStart(2, '0');
             const bHex = clamp(b).toString(16).padStart(2, '0');
             hexColor = `${rHex}${gHex}${bHex}`;
           } else {
-            // Invalid RGB format, default to white
             hexColor = 'ffffff';
           }
         } else {
-          // Unknown format, default to white
           hexColor = 'ffffff';
         }
       
         return BigInt(`0x${hexColor}`);
       });
 
+      console.log("Token IDs:", tokenIds);
+      console.log("Colors:", colors);
+
       // Check if the user has approved enough tokens
       const requiredTokens = BigInt(selectedPixels.size);
       const decimals = await paintDecimals!;
       const requiredTokensWithDecimals = requiredTokens * BigInt(10) ** BigInt(decimals);
 
+      console.log("Required tokens:", requiredTokensWithDecimals.toString());
+      console.log("Current allowance:", allowance?.toString());
+
       if (allowance! < requiredTokensWithDecimals) {
+        console.log("Approving tokens");
         // User needs to approve more tokens
-        await approve({
+        const approveTx = await approve({
           functionName: "approve",
           args: [collaborativeArtCanvas!.address, requiredTokensWithDecimals],
         });
+        console.log("Approve transaction:", approveTx);
+        // Wait for the transaction to be mined
+        await new Promise(resolve => setTimeout(resolve, 15000)); // Wait for 15 seconds
       }
 
+      console.log("Setting pixel colors");
       // Call the setPixelColors function
-      await setPixelColors({
+      const tx = await setPixelColors({
         functionName: "setPixelColors",
         args: [tokenIds, colors],
       });
+      console.log("Transaction:", tx);
+      // Wait for the transaction to be mined
+      await new Promise(resolve => setTimeout(resolve, 15000)); // Wait for 15 seconds
 
       notification.success("Pixels painted successfully!");
       setSelectedPixels(new Set());
       setIsPurchaseModalOpen(false);
       setPurchaseStep(1);
     } catch (error: any) {
-      console.error(error);
+      console.error("Error in handlePaintPixels:", error);
       notification.error(error?.reason || "Failed to paint pixels");
     }
   };
@@ -499,28 +552,14 @@ export default function CollaborativeArtCanvas() {
     // This can be used to provide additional feedback if needed
   };
 
-  const getPixelCoordinates = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return { x: -1, y: -1 };
-
-    const rect = canvas.getBoundingClientRect();
-    const x = Math.floor((event.clientX - rect.left - panOffset.x) / pixelSize);
-    const y = Math.floor((event.clientY - rect.top - panOffset.y) / pixelSize);
-    return { x, y };
-  };
-
-  const ToolButton = ({
-    onClick,
-    isActive,
-    icon: Icon,
-    label,
-  }: {
-    onClick: () => void;
-    isActive: boolean;
-    icon: React.ElementType;
-    label: string;
-  }) => (
-    <button onClick={onClick} className={`btn ${isActive ? "btn-primary" : "btn-outline"} m-1`} title={label}>
+  const ToolButton = ({ onClick, isActive, icon: Icon, label }: ToolButtonProps) => (
+    <button
+      onClick={onClick}
+      className={`btn ${
+        isActive ? "bg-blue-600 text-white" : "bg-white bg-opacity-20 text-white hover:bg-white hover:bg-opacity-30"
+      } m-1 border-0 transition-all duration-200 shadow-md`}
+      title={label}
+    >
       <Icon className="w-5 h-5" />
       <span className="hidden sm:inline ml-2">{label}</span>
     </button>
@@ -539,13 +578,30 @@ export default function CollaborativeArtCanvas() {
     setSelectedPixels(new Set());
   };
 
+  const getGasPrice = async () => {
+    // Implement this to get the current gas price
+    // You can use ethers.js or web3.js to get this information
+    // For example, with ethers.js:
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // return await provider.getGasPrice();
+  };
+
+  const getUserEthBalance = async () => {
+    // Implement this to get the user's ETH balance
+    // You can use ethers.js or web3.js to get this information
+    // For example, with ethers.js:
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const balance = await provider.getBalance(userAddress);
+    // return balance;
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row p-4 gap-4">
+    <div className="flex flex-col lg:flex-row p-4 gap-4 bg-[#34495e] min-h-screen">
       {isLoading ? (
         <div className="flex justify-center items-center h-screen w-full">
           <div className="text-center">
             <Spinner animation="border" role="status" className="mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-primary">Loading...</h2>
+            <h2 className="text-2xl font-semibold text-white">Loading...</h2>
           </div>
         </div>
       ) : (
@@ -556,33 +612,28 @@ export default function CollaborativeArtCanvas() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="bg-base-200 p-4 rounded-lg shadow-lg mb-4 flex flex-wrap justify-between">
+            <div className="bg-[#2c3e50] p-4 rounded-lg shadow-lg mb-4 flex flex-wrap justify-between">
               <div className="flex flex-wrap">
                 <ToolButton onClick={() => setTool("brush")} isActive={tool === "brush"} icon={Paintbrush} label="Brush" />
-                <ToolButton onClick={() => setTool("select")} isActive={tool === "select"} icon={Info} label="Select" />
                 <ToolButton onClick={() => setTool("pan")} isActive={tool === "pan"} icon={Move} label="Pan" />
                 <ToolButton onClick={() => handleZoom(1)} isActive={false} icon={ZoomIn} label="Zoom In" />
                 <ToolButton onClick={() => handleZoom(-1)} isActive={false} icon={ZoomOut} label="Zoom Out" />
               </div>
               <div className="flex justify-center space-x-2">
                 {/* ... existing buttons ... */}
-                <button
-                  className={`btn btn-primary btn-sm`}
-                  onClick={clearCanvas}
-                >
-                  Clear Canvas
-                </button>
               </div>
             </div>
-            <div className="bg-base-200 p-4 rounded-lg shadow-lg flex-grow relative overflow-hidden">
+            <div className="bg-[#2c3e50] p-4 rounded-lg shadow-lg flex-grow relative overflow-hidden">
               <canvas
                 ref={canvasRef}
                 width={CANVAS_SIZE * pixelSize}
                 height={CANVAS_SIZE * pixelSize}
-                className="cursor-crosshair"
+                className="cursor-crosshair mx-auto"
                 style={{
                   width: `${CANVAS_SIZE * pixelSize}px`,
                   height: `${CANVAS_SIZE * pixelSize}px`,
+                  maxWidth: '100%',
+                  maxHeight: 'calc(100vh - 200px)',
                 }}
                 onMouseDown={handleCanvasMouseDown}
                 onMouseMove={handleCanvasMouseMove}
@@ -603,88 +654,100 @@ export default function CollaborativeArtCanvas() {
           </motion.div>
 
           <motion.div
-            className="w-full lg:w-80 space-y-6"
+            className="w-full lg:w-80 space-y-4"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="tabs tabs-boxed bg-base-300">
-              <a className={`tab ${activeTab === "color" ? "tab-active" : ""}`} onClick={() => setActiveTab("color")}>
-                Color
-              </a>
-              <a className={`tab ${activeTab === "image" ? "tab-active" : ""}`} onClick={() => setActiveTab("image")}>
-                Image
-              </a>
-            </div>
-            <div className="bg-base-200 p-4 rounded-lg shadow-lg">
-              {activeTab === "color" && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-4 text-base-content">Color Picker</h2>
-                  <div className="flex items-center gap-4 mb-4">
-                    <input
-                      type="color"
-                      value={selectedColor}
-                      onChange={e => setSelectedColor(e.target.value)}
-                      className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={selectedColor}
-                      onChange={e => setSelectedColor(e.target.value)}
-                      className="input input-bordered w-full text-base-content"
-                    />
-                  </div>
-                </div>
-              )}
-              {activeTab === "image" && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-4 text-primary">Upload Image</h2>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="file-input file-input-bordered w-full"
-                  />
-                  <p className="text-sm text-base-content mt-2">
-                    Upload an image and select two corners to apply it to the canvas.
-                  </p>
-                  {uploadedImage && (
-                    <div className="mt-4">
-                      <img
-                        src={uploadedImage.src}
-                        alt="Uploaded"
-                        style={{ maxWidth: "100%", maxHeight: "200px" }}
+            <div className="bg-[#2c3e50] rounded-lg shadow-lg overflow-hidden">
+              <div className="tabs tabs-boxed bg-transparent">
+                <a
+                  className={`tab flex-1 ${activeTab === "color" ? "bg-blue-600 text-white" : "text-white"}`}
+                  onClick={() => setActiveTab("color")}
+                >
+                  Color
+                </a>
+                <a
+                  className={`tab flex-1 ${activeTab === "image" ? "bg-blue-600 text-white" : "text-white"}`}
+                  onClick={() => setActiveTab("image")}
+                >
+                  Image
+                </a>
+              </div>
+              <div className="p-4">
+                {activeTab === "color" && (
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4 text-white">Color Picker</h2>
+                    <div className="flex items-center gap-4 mb-4">
+                      <input
+                        type="color"
+                        value={selectedColor}
+                        onChange={e => setSelectedColor(e.target.value)}
+                        className="w-10 h-10 overflow-hidden cursor-pointer"
                       />
-                      {imageCorners.length === 2 ? (
-                        <button className="btn btn-primary mt-4" onClick={applyImageToCanvas}>
-                          Apply Image
-                        </button>
-                      ) : (
-                        <p className="text-base-content mt-2">Select two corners on the canvas to position the image</p>
-                      )}
+                      <input
+                        type="text"
+                        value={selectedColor}
+                        onChange={e => setSelectedColor(e.target.value)}
+                        className="input input-bordered w-full text-white bg-blue-800 bg-opacity-50"
+                      />
                     </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
+                {activeTab === "image" && (
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4 text-white">Upload Image</h2>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="file-input file-input-bordered w-full bg-blue-800 bg-opacity-50 text-white"
+                    />
+                    <p className="text-sm text-white mt-2">
+                      Upload an image and select two corners to apply it to the canvas.
+                    </p>
+                    {uploadedImage && (
+                      <div className="mt-4">
+                        <img
+                          src={uploadedImage.src}
+                          alt="Uploaded"
+                          style={{ maxWidth: "100%", maxHeight: "200px" }}
+                        />
+                        {imageCorners.length === 2 ? (
+                          <button className="btn btn-primary mt-4" onClick={applyImageToCanvas}>
+                            Apply Image
+                          </button>
+                        ) : (
+                          <p className="text-white mt-2">Select two corners on the canvas to position the image</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <AnimatePresence>
               {selectedPixels.size > 0 && (
                 <motion.div
-                  className="bg-base-200 p-4 rounded-lg shadow-lg"
+                  className="bg-[#2c3e50] p-4 rounded-lg shadow-lg"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h2 className="text-xl font-semibold mb-4 text-primary">Selected Pixels</h2>
-                  <p className="text-base-content">{selectedPixels.size} pixel(s) selected</p>
-                  <div className="flex justify-between items-center mt-4">
-                    <button className="btn btn-primary" onClick={handlePurchasePixels}>
+                  <h2 className="text-xl font-semibold mb-4 text-white">Selected Pixels</h2>
+                  <p className="text-white">{selectedPixels.size} pixel(s) selected</p>
+                  <div className="flex flex-col gap-2 mt-4">
+                    <button
+                      className={`btn btn-primary w-full ${isPainting ? "loading" : ""}`}
+                      onClick={handlePaintPixels}
+                      disabled={isPainting}
+                    >
                       <ShoppingCart className="w-4 h-4 mr-2" />
-                      Purchase Selected Pixels
+                      {isPainting ? "Painting..." : "Purchase Selected"}
                     </button>
-                    <button className="btn btn-ghost" onClick={clearCanvas}>
+                    <button className="btn btn-outline btn-error w-full" onClick={clearCanvas}>
                       Clear Canvas
                     </button>
                   </div>
@@ -692,7 +755,7 @@ export default function CollaborativeArtCanvas() {
               )}
             </AnimatePresence>
 
-            <button className="btn btn-outline w-full" onClick={() => setIsModalOpen(true)}>
+            <button className="btn btn-outline btn-primary w-full text-white" onClick={() => setIsModalOpen(true)}>
               <Eye className="w-4 h-4 mr-2" />
               How It Works
             </button>
@@ -708,7 +771,7 @@ export default function CollaborativeArtCanvas() {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                  <div className="fixed inset-0 bg-black bg-opacity-50" />
                 </Transition.Child>
 
                 <div className="fixed inset-0 overflow-y-auto">
@@ -722,12 +785,12 @@ export default function CollaborativeArtCanvas() {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-base-100 p-6 text-left align-middle shadow-xl transition-all">
-                        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-primary">
+                      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-base-200 p-6 text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-base-content">
                           How It Works
                         </Dialog.Title>
                         <div className="mt-2">
-                          <p className="text-sm text-base-content">
+                          <p className="text-sm text-base-content opacity-80">
                             1. Select a color or upload an image.
                             <br />
                             2. Click on the canvas to paint pixels.
@@ -741,7 +804,11 @@ export default function CollaborativeArtCanvas() {
                         </div>
 
                         <div className="mt-4">
-                          <button type="button" className="btn btn-primary" onClick={() => setIsModalOpen(false)}>
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => setIsModalOpen(false)}
+                          >
                             Got it, thanks!
                           </button>
                         </div>

@@ -14,6 +14,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const PAINT_TOKEN_SUPPLY = "10000000000000000000000000"; // 10,000,000 tokens with 18 decimals
 
+  console.log("Deployer address:", deployer);
+
   // Deploy the CollaborativeArtCanvas contract first
   const collaborativeArtCanvas = await deploy("CollaborativeArtCanvas", {
     from: deployer,
@@ -21,7 +23,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
     autoMine: true,
   });
-/*
+
   // Deploy the PaintToken contract, passing the CollaborativeArtCanvas address as the constructor argument
   await deploy("PaintToken", {
     from: deployer,
@@ -30,7 +32,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
 
-  */
+  
 };
 
 export default func;

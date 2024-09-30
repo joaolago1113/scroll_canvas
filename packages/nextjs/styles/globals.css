@@ -4,11 +4,17 @@
 
 :root,
 [data-theme] {
-  background: oklch(var(--b2));
+  background: #5f9cda;
+  color: #ecf0f1;
 }
 
 body {
   min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+
+main {
+  background: #5f9cda;
 }
 
 h1,
@@ -16,17 +22,102 @@ h2,
 h3,
 h4 {
   margin-bottom: 0.5rem;
-  line-height: 1;
+  line-height: 1.2;
+  font-weight: 600;
 }
 
 p {
   margin: 1rem 0;
+  line-height: 1.5;
 }
 
 .btn {
   @apply shadow-md;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ecf0f1;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn.btn-primary {
+  background-color: #3498db;
+  border-color: #3498db;
+  color: #ecf0f1;
+}
+
+.btn.btn-primary:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
 }
 
 .btn.btn-ghost {
   @apply shadow-none;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn.btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.input {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ecf0f1;
+}
+
+.input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.rounded-lg {
+  @apply overflow-hidden;
+}
+
+.bg-base-100 {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.bg-base-200 {
+  background-color: rgba(52, 73, 94, 0.8);
+}
+
+.text-base-content {
+  color: #ecf0f1;
+}
+
+.shadow-custom {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.transition-custom {
+  transition: all 0.3s ease;
+}
+
+/* Dropdown menu styles */
+.dropdown-content {
+  background-color: rgba(52, 73, 94, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-content .btn-sm {
+  color: #ecf0f1;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-content .btn-sm:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-content .text-error {
+  color: #e74c3c;
 }
