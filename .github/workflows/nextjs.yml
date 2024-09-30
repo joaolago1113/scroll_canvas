@@ -47,10 +47,6 @@ jobs:
           NEXT_PUBLIC_ALCHEMY_API_KEY: ${{ secrets.NEXT_PUBLIC_ALCHEMY_API_KEY }}
         run: yarn build
 
-      - name: Export Next.js Site
-        working-directory: packages/nextjs
-        run: yarn export
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
