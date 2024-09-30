@@ -47,6 +47,10 @@ https://github.com/user-attachments/assets/4d566887-1631-4051-ac94-b61477a81dfa
   - **Alchemy RPC with Scroll API:** Integrated through **Scaffold-ETH 2** in `packages/nextjs/scaffold.config.ts`, enabling seamless interaction with the Scroll blockchain.
   - **Pointed Use of Alchemy RPC:** The Alchemy RPC is utilized in the frontend configuration through the `packages/nextjs/scaffold.config.ts` file, and `packages/hardhat/hardhat.config.ts`.
 
+    - https://github.com/joaolago1113/scroll_canvas/blob/main/packages/hardhat/hardhat.config.ts
+
+    - https://github.com/joaolago1113/scroll_canvas/blob/main/packages/nextjs/scaffold.config.ts
+
 ---
 
 ## **Deployment Details**
