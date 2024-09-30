@@ -420,40 +420,26 @@ export default function CollaborativeArtCanvas() {
   };
 
   const handlePurchasePixels = async () => {
-    console.log("handlePurchasePixels called");
-    if (selectedPixels.size === 0) {
-      console.log("No pixels selected");
-      notification.error("Please select at least one pixel to purchase.");
-      return;
-    }
+    if (selectedPixels.size === 0) return;
 
     const userBalance = balanceOf ? BigInt(balanceOf) : BigInt(0);
     const requiredTokens = BigInt(selectedPixels.size);
 
-    console.log("User Paint Token balance:", userBalance.toString());
-    console.log("Required Paint Tokens:", requiredTokens.toString());
-
     const decimals = await paintDecimals!;
-    console.log("Decimals:", decimals);
-
-    const userBalanceWithDecimals = userBalance;
+    const userBalanceWithDecimals = userBalance / BigInt(10) ** BigInt(decimals);
     const requiredTokensWithDecimals = requiredTokens * BigInt(10) ** BigInt(decimals);
 
-    console.log("User balance with decimals:", userBalanceWithDecimals.toString());
-    console.log("Required tokens with decimals:", requiredTokensWithDecimals.toString());
-
     if (userBalanceWithDecimals >= requiredTokensWithDecimals) {
-      console.log("User has enough tokens, proceeding to paint");
+      // User has enough tokens, skip purchase step
       setPurchaseStep(2);
     } else {
-      console.log("User needs to buy more tokens");
-      setPaintTokensToBuy(Number((requiredTokensWithDecimals - userBalanceWithDecimals) / BigInt(10) ** BigInt(decimals)));
+      // User needs to buy more tokens
+      const tokensToBuy = Math.max(1, Math.ceil(Number((requiredTokensWithDecimals - userBalanceWithDecimals) / BigInt(10) ** BigInt(decimals))));
+      setPaintTokensToBuy(tokensToBuy);
       setPurchaseStep(1);
     }
 
     setIsPurchaseModalOpen(true);
-    console.log("Purchase modal state:", isPurchaseModalOpen);
-    console.log("Purchase step:", purchaseStep);
   };
 
   const handleBuyPaintTokens = async () => {
@@ -463,8 +449,8 @@ export default function CollaborativeArtCanvas() {
         args: [BigInt(paintTokensToBuy)],
         value: BigInt(Math.floor(paintTokensToBuy * 0.00003 * 10 ** 18)),
       });
-      setPurchaseStep(2);
       notification.success("Paint tokens purchased successfully!");
+      setPurchaseStep(2); // Set the purchase step to 2 (Paint Pixels)
     } catch (error: any) {
       console.error(error);
       notification.error(error?.reason || "Failed to buy Paint tokens");
@@ -473,7 +459,6 @@ export default function CollaborativeArtCanvas() {
 
   const handlePaintPixels = async () => {
     try {
-      console.log("handlePaintPixels called");
       const tokenIds = Array.from(selectedPixels).map(key => {
         const [x, y] = key.split(",").map(Number);
         return BigInt(y * CANVAS_SIZE + x);
@@ -484,65 +469,56 @@ export default function CollaborativeArtCanvas() {
         let hexColor = '';
       
         if (colorStr.startsWith('#')) {
+          // Hex format: Remove the '#' and use the remaining string
           hexColor = colorStr.substring(1);
         } else if (colorStr.startsWith('rgb')) {
+          // RGB format: Extract the numeric values and convert to hex
           const rgbValues = colorStr.match(/\d+/g);
           if (rgbValues && rgbValues.length === 3) {
             const [r, g, b] = rgbValues.map(n => parseInt(n, 10));
+            // Ensure values are within 0-255 and convert to hex with padding
             const clamp = (num: number) => Math.max(0, Math.min(255, num));
             const rHex = clamp(r).toString(16).padStart(2, '0');
             const gHex = clamp(g).toString(16).padStart(2, '0');
             const bHex = clamp(b).toString(16).padStart(2, '0');
             hexColor = `${rHex}${gHex}${bHex}`;
           } else {
+            // Invalid RGB format, default to white
             hexColor = 'ffffff';
           }
         } else {
+          // Unknown format, default to white
           hexColor = 'ffffff';
         }
       
         return BigInt(`0x${hexColor}`);
       });
 
-      console.log("Token IDs:", tokenIds);
-      console.log("Colors:", colors);
-
       // Check if the user has approved enough tokens
       const requiredTokens = BigInt(selectedPixels.size);
       const decimals = await paintDecimals!;
       const requiredTokensWithDecimals = requiredTokens * BigInt(10) ** BigInt(decimals);
 
-      console.log("Required tokens:", requiredTokensWithDecimals.toString());
-      console.log("Current allowance:", allowance?.toString());
-
       if (allowance! < requiredTokensWithDecimals) {
-        console.log("Approving tokens");
         // User needs to approve more tokens
-        const approveTx = await approve({
+        await approve({
           functionName: "approve",
           args: [collaborativeArtCanvas!.address, requiredTokensWithDecimals],
         });
-        console.log("Approve transaction:", approveTx);
-        // Wait for the transaction to be mined
-        await new Promise(resolve => setTimeout(resolve, 15000)); // Wait for 15 seconds
       }
 
-      console.log("Setting pixel colors");
       // Call the setPixelColors function
-      const tx = await setPixelColors({
+      await setPixelColors({
         functionName: "setPixelColors",
         args: [tokenIds, colors],
       });
-      console.log("Transaction:", tx);
-      // Wait for the transaction to be mined
-      await new Promise(resolve => setTimeout(resolve, 15000)); // Wait for 15 seconds
 
       notification.success("Pixels painted successfully!");
       setSelectedPixels(new Set());
       setIsPurchaseModalOpen(false);
       setPurchaseStep(1);
     } catch (error: any) {
-      console.error("Error in handlePaintPixels:", error);
+      console.error(error);
       notification.error(error?.reason || "Failed to paint pixels");
     }
   };
@@ -570,7 +546,12 @@ export default function CollaborativeArtCanvas() {
       const newData = prevData.map((row, y) =>
         row.map((_, x) => {
           const key = `${x},${y}`;
-          return selectedPixels.has(key) ? originalCanvasData[y][x] : prevData[y][x];
+          if (selectedPixels.has(key)) {
+            const pixelId = y * CANVAS_SIZE + x;
+            const color = allPixels![pixelId];
+            return color === 0n ? "#FFFFFF" : `#${color.toString(16).padStart(6, "0")}`;
+          }
+          return prevData[y][x];
         })
       );
       return newData;
@@ -741,7 +722,7 @@ export default function CollaborativeArtCanvas() {
                   <div className="flex flex-col gap-2 mt-4">
                     <button
                       className={`btn btn-primary w-full ${isPainting ? "loading" : ""}`}
-                      onClick={handlePaintPixels}
+                      onClick={handlePurchasePixels}
                       disabled={isPainting}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
