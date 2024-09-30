@@ -1,6 +1,11 @@
 # dependencies
 node_modules
-
+.env
+.env.local
+packages/nextjs/.env.local
+packages/nextjs/.env
+packages/hardhat/.env.local
+packages/hardhat/.env
 # yarn
 .yarn/*
 !.yarn/patches
