@@ -10,7 +10,7 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.scrollSepolia], // Ensure chains.hardhat has chainId=31337
+  targetNetworks: [chains.scroll], // Ensure chains.hardhat has chainId=31337
 
   // Polling interval for frontend (in milliseconds)
   pollingInterval: 30000,

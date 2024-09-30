@@ -1,0 +1,553 @@
+{
+  "address": "0x809fc41d9a8aF8a74e965760D0daf264FF1910Fc",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "initialOwner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ReentrancyGuardReentrantCall",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "PaintTokensPurchased",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "pixelId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "color",
+          "type": "uint256"
+        }
+      ],
+      "name": "PixelChanged",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "CANVAS_HEIGHT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "CANVAS_WIDTH",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "PAINT_TOKEN_PRICE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "PAINT_TOKEN_SUPPLY",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "TOTAL_PIXELS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "buyPaintTokens",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllPixels",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "pixelId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPixel",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "color",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct CollaborativeArtCanvas.Pixel",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paintToken",
+      "outputs": [
+        {
+          "internalType": "contract PaintToken",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "pixels",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "color",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "pixelIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "colors",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "setPixelColors",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x20467a49b71c908f8b7a25c1ee350efc79143ce3e9c127649cf688060deaaefe",
+  "receipt": {
+    "to": null,
+    "from": "0x099BD5114B7B2986eFE33D0a2C2d2063C3F3B53b",
+    "contractAddress": "0x809fc41d9a8aF8a74e965760D0daf264FF1910Fc",
+    "transactionIndex": 16,
+    "gasUsed": "1631863",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000008000000000001000200000000000100000000000000000000020000000000080000000800000000000000000000000010000000400000002000008000000000000400000000001000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000002000000000000000000000040200000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000008",
+    "blockHash": "0x734a79e258737f3833273fa33057e19fde1011c3b8785b474ef8341360a0e14d",
+    "transactionHash": "0x20467a49b71c908f8b7a25c1ee350efc79143ce3e9c127649cf688060deaaefe",
+    "logs": [
+      {
+        "transactionIndex": 16,
+        "blockNumber": 9747838,
+        "transactionHash": "0x20467a49b71c908f8b7a25c1ee350efc79143ce3e9c127649cf688060deaaefe",
+        "address": "0x809fc41d9a8aF8a74e965760D0daf264FF1910Fc",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000099bd5114b7b2986efe33d0a2c2d2063c3f3b53b"
+        ],
+        "data": "0x",
+        "logIndex": 63,
+        "blockHash": "0x734a79e258737f3833273fa33057e19fde1011c3b8785b474ef8341360a0e14d"
+      },
+      {
+        "transactionIndex": 16,
+        "blockNumber": 9747838,
+        "transactionHash": "0x20467a49b71c908f8b7a25c1ee350efc79143ce3e9c127649cf688060deaaefe",
+        "address": "0x78094a9D21b6e9a57e66C37885405B43A0784dDc",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000809fc41d9a8af8a74e965760d0daf264ff1910fc"
+        ],
+        "data": "0x",
+        "logIndex": 64,
+        "blockHash": "0x734a79e258737f3833273fa33057e19fde1011c3b8785b474ef8341360a0e14d"
+      },
+      {
+        "transactionIndex": 16,
+        "blockNumber": 9747838,
+        "transactionHash": "0x20467a49b71c908f8b7a25c1ee350efc79143ce3e9c127649cf688060deaaefe",
+        "address": "0x78094a9D21b6e9a57e66C37885405B43A0784dDc",
+        "topics": [
+          "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000809fc41d9a8af8a74e965760d0daf264ff1910fc"
+        ],
+        "data": "0x000000000000000000000000000000000000000000084595161401484a000000",
+        "logIndex": 65,
+        "blockHash": "0x734a79e258737f3833273fa33057e19fde1011c3b8785b474ef8341360a0e14d"
+      }
+    ],
+    "blockNumber": 9747838,
+    "cumulativeGasUsed": "4808339",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x099BD5114B7B2986eFE33D0a2C2d2063C3F3B53b"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "6cb4a328312801bdb644e326fa13e11e",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"initialOwner\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalPrice\",\"type\":\"uint256\"}],\"name\":\"PaintTokensPurchased\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"pixelId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"color\",\"type\":\"uint256\"}],\"name\":\"PixelChanged\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"CANVAS_HEIGHT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"CANVAS_WIDTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"PAINT_TOKEN_PRICE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"PAINT_TOKEN_SUPPLY\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"TOTAL_PIXELS\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"buyPaintTokens\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllPixels\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"pixelId\",\"type\":\"uint256\"}],\"name\":\"getPixel\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"color\",\"type\":\"uint256\"}],\"internalType\":\"struct CollaborativeArtCanvas.Pixel\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paintToken\",\"outputs\":[{\"internalType\":\"contract PaintToken\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"pixels\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"color\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256[]\",\"name\":\"pixelIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"colors\",\"type\":\"uint256[]\"}],\"name\":\"setPixelColors\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}],\"ReentrancyGuardReentrantCall()\":[{\"details\":\"Unauthorized reentrant call.\"}]},\"kind\":\"dev\",\"methods\":{\"buyPaintTokens(uint256)\":{\"params\":{\"amount\":\"The number of PaintTokens to purchase (without decimals)\"}},\"constructor\":{\"params\":{\"initialOwner\":\"The address of the initial owner\"}},\"getAllPixels()\":{\"returns\":{\"_0\":\"An array of pixel colors\"}},\"getPixel(uint256)\":{\"params\":{\"pixelId\":\"The ID of the pixel to retrieve\"},\"returns\":{\"_0\":\"The Pixel struct containing the color\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"setPixelColors(uint256[],uint256[])\":{\"params\":{\"colors\":\"An array of colors corresponding to the pixel IDs\",\"pixelIds\":\"An array of pixel IDs to set\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"CollaborativeArtCanvas\",\"version\":1},\"userdoc\":{\"events\":{\"PaintTokensPurchased(address,uint256,uint256)\":{\"notice\":\"Emitted when a user purchases PaintTokens\"},\"PixelChanged(uint256,uint256)\":{\"notice\":\"Emitted when a pixel's color is changed\"}},\"kind\":\"user\",\"methods\":{\"buyPaintTokens(uint256)\":{\"notice\":\"Allows users to purchase PaintTokens by sending ETH\"},\"constructor\":{\"notice\":\"Constructor that deploys the PaintToken contract and sets the initial owner\"},\"getAllPixels()\":{\"notice\":\"Returns an array of all pixel colors\"},\"getPixel(uint256)\":{\"notice\":\"Retrieves the color of a specific pixel\"},\"pixels(uint256)\":{\"notice\":\"Mapping from pixel ID to Pixel data\"},\"setPixelColors(uint256[],uint256[])\":{\"notice\":\"Allows users to set the colors of multiple pixels on the canvas\"},\"withdraw()\":{\"notice\":\"Allows the owner to withdraw all ETH from the contract\"}},\"notice\":\"A contract that allows users to collaboratively create pixel art by purchasing and setting pixel colors\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CollaborativeArtCanvas.sol\":\"CollaborativeArtCanvas\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/interfaces/draft-IERC6093.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (interfaces/draft-IERC6093.sol)\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Standard ERC20 Errors\\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC20 tokens.\\n */\\ninterface IERC20Errors {\\n    /**\\n     * @dev Indicates an error related to the current `balance` of a `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     * @param balance Current balance for the interacting account.\\n     * @param needed Minimum amount required to perform a transfer.\\n     */\\n    error ERC20InsufficientBalance(address sender, uint256 balance, uint256 needed);\\n\\n    /**\\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     */\\n    error ERC20InvalidSender(address sender);\\n\\n    /**\\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\\n     * @param receiver Address to which tokens are being transferred.\\n     */\\n    error ERC20InvalidReceiver(address receiver);\\n\\n    /**\\n     * @dev Indicates a failure with the `spender`\\u2019s `allowance`. Used in transfers.\\n     * @param spender Address that may be allowed to operate on tokens without being their owner.\\n     * @param allowance Amount of tokens a `spender` is allowed to operate with.\\n     * @param needed Minimum amount required to perform a transfer.\\n     */\\n    error ERC20InsufficientAllowance(address spender, uint256 allowance, uint256 needed);\\n\\n    /**\\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\\n     * @param approver Address initiating an approval operation.\\n     */\\n    error ERC20InvalidApprover(address approver);\\n\\n    /**\\n     * @dev Indicates a failure with the `spender` to be approved. Used in approvals.\\n     * @param spender Address that may be allowed to operate on tokens without being their owner.\\n     */\\n    error ERC20InvalidSpender(address spender);\\n}\\n\\n/**\\n * @dev Standard ERC721 Errors\\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC721 tokens.\\n */\\ninterface IERC721Errors {\\n    /**\\n     * @dev Indicates that an address can't be an owner. For example, `address(0)` is a forbidden owner in EIP-20.\\n     * Used in balance queries.\\n     * @param owner Address of the current owner of a token.\\n     */\\n    error ERC721InvalidOwner(address owner);\\n\\n    /**\\n     * @dev Indicates a `tokenId` whose `owner` is the zero address.\\n     * @param tokenId Identifier number of a token.\\n     */\\n    error ERC721NonexistentToken(uint256 tokenId);\\n\\n    /**\\n     * @dev Indicates an error related to the ownership over a particular token. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     * @param tokenId Identifier number of a token.\\n     * @param owner Address of the current owner of a token.\\n     */\\n    error ERC721IncorrectOwner(address sender, uint256 tokenId, address owner);\\n\\n    /**\\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     */\\n    error ERC721InvalidSender(address sender);\\n\\n    /**\\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\\n     * @param receiver Address to which tokens are being transferred.\\n     */\\n    error ERC721InvalidReceiver(address receiver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator`\\u2019s approval. Used in transfers.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     * @param tokenId Identifier number of a token.\\n     */\\n    error ERC721InsufficientApproval(address operator, uint256 tokenId);\\n\\n    /**\\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\\n     * @param approver Address initiating an approval operation.\\n     */\\n    error ERC721InvalidApprover(address approver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator` to be approved. Used in approvals.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     */\\n    error ERC721InvalidOperator(address operator);\\n}\\n\\n/**\\n * @dev Standard ERC1155 Errors\\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC1155 tokens.\\n */\\ninterface IERC1155Errors {\\n    /**\\n     * @dev Indicates an error related to the current `balance` of a `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     * @param balance Current balance for the interacting account.\\n     * @param needed Minimum amount required to perform a transfer.\\n     * @param tokenId Identifier number of a token.\\n     */\\n    error ERC1155InsufficientBalance(address sender, uint256 balance, uint256 needed, uint256 tokenId);\\n\\n    /**\\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     */\\n    error ERC1155InvalidSender(address sender);\\n\\n    /**\\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\\n     * @param receiver Address to which tokens are being transferred.\\n     */\\n    error ERC1155InvalidReceiver(address receiver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator`\\u2019s approval. Used in transfers.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     * @param owner Address of the current owner of a token.\\n     */\\n    error ERC1155MissingApprovalForAll(address operator, address owner);\\n\\n    /**\\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\\n     * @param approver Address initiating an approval operation.\\n     */\\n    error ERC1155InvalidApprover(address approver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator` to be approved. Used in approvals.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     */\\n    error ERC1155InvalidOperator(address operator);\\n\\n    /**\\n     * @dev Indicates an array length mismatch between ids and values in a safeBatchTransferFrom operation.\\n     * Used in batch transfers.\\n     * @param idsLength Length of the array of token identifiers\\n     * @param valuesLength Length of the array of token amounts\\n     */\\n    error ERC1155InvalidArrayLength(uint256 idsLength, uint256 valuesLength);\\n}\\n\",\"keccak256\":\"0x60c65f701957fdd6faea1acb0bb45825791d473693ed9ecb34726fdfaa849dd7\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/ERC20.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IERC20} from \\\"./IERC20.sol\\\";\\nimport {IERC20Metadata} from \\\"./extensions/IERC20Metadata.sol\\\";\\nimport {Context} from \\\"../../utils/Context.sol\\\";\\nimport {IERC20Errors} from \\\"../../interfaces/draft-IERC6093.sol\\\";\\n\\n/**\\n * @dev Implementation of the {IERC20} interface.\\n *\\n * This implementation is agnostic to the way tokens are created. This means\\n * that a supply mechanism has to be added in a derived contract using {_mint}.\\n *\\n * TIP: For a detailed writeup see our guide\\n * https://forum.openzeppelin.com/t/how-to-implement-erc20-supply-mechanisms/226[How\\n * to implement supply mechanisms].\\n *\\n * The default value of {decimals} is 18. To change this, you should override\\n * this function so it returns a different value.\\n *\\n * We have followed general OpenZeppelin Contracts guidelines: functions revert\\n * instead returning `false` on failure. This behavior is nonetheless\\n * conventional and does not conflict with the expectations of ERC20\\n * applications.\\n *\\n * Additionally, an {Approval} event is emitted on calls to {transferFrom}.\\n * This allows applications to reconstruct the allowance for all accounts just\\n * by listening to said events. Other implementations of the EIP may not emit\\n * these events, as it isn't required by the specification.\\n */\\nabstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {\\n    mapping(address account => uint256) private _balances;\\n\\n    mapping(address account => mapping(address spender => uint256)) private _allowances;\\n\\n    uint256 private _totalSupply;\\n\\n    string private _name;\\n    string private _symbol;\\n\\n    /**\\n     * @dev Sets the values for {name} and {symbol}.\\n     *\\n     * All two of these values are immutable: they can only be set once during\\n     * construction.\\n     */\\n    constructor(string memory name_, string memory symbol_) {\\n        _name = name_;\\n        _symbol = symbol_;\\n    }\\n\\n    /**\\n     * @dev Returns the name of the token.\\n     */\\n    function name() public view virtual returns (string memory) {\\n        return _name;\\n    }\\n\\n    /**\\n     * @dev Returns the symbol of the token, usually a shorter version of the\\n     * name.\\n     */\\n    function symbol() public view virtual returns (string memory) {\\n        return _symbol;\\n    }\\n\\n    /**\\n     * @dev Returns the number of decimals used to get its user representation.\\n     * For example, if `decimals` equals `2`, a balance of `505` tokens should\\n     * be displayed to a user as `5.05` (`505 / 10 ** 2`).\\n     *\\n     * Tokens usually opt for a value of 18, imitating the relationship between\\n     * Ether and Wei. This is the default value returned by this function, unless\\n     * it's overridden.\\n     *\\n     * NOTE: This information is only used for _display_ purposes: it in\\n     * no way affects any of the arithmetic of the contract, including\\n     * {IERC20-balanceOf} and {IERC20-transfer}.\\n     */\\n    function decimals() public view virtual returns (uint8) {\\n        return 18;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-totalSupply}.\\n     */\\n    function totalSupply() public view virtual returns (uint256) {\\n        return _totalSupply;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-balanceOf}.\\n     */\\n    function balanceOf(address account) public view virtual returns (uint256) {\\n        return _balances[account];\\n    }\\n\\n    /**\\n     * @dev See {IERC20-transfer}.\\n     *\\n     * Requirements:\\n     *\\n     * - `to` cannot be the zero address.\\n     * - the caller must have a balance of at least `value`.\\n     */\\n    function transfer(address to, uint256 value) public virtual returns (bool) {\\n        address owner = _msgSender();\\n        _transfer(owner, to, value);\\n        return true;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-allowance}.\\n     */\\n    function allowance(address owner, address spender) public view virtual returns (uint256) {\\n        return _allowances[owner][spender];\\n    }\\n\\n    /**\\n     * @dev See {IERC20-approve}.\\n     *\\n     * NOTE: If `value` is the maximum `uint256`, the allowance is not updated on\\n     * `transferFrom`. This is semantically equivalent to an infinite approval.\\n     *\\n     * Requirements:\\n     *\\n     * - `spender` cannot be the zero address.\\n     */\\n    function approve(address spender, uint256 value) public virtual returns (bool) {\\n        address owner = _msgSender();\\n        _approve(owner, spender, value);\\n        return true;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-transferFrom}.\\n     *\\n     * Emits an {Approval} event indicating the updated allowance. This is not\\n     * required by the EIP. See the note at the beginning of {ERC20}.\\n     *\\n     * NOTE: Does not update the allowance if the current allowance\\n     * is the maximum `uint256`.\\n     *\\n     * Requirements:\\n     *\\n     * - `from` and `to` cannot be the zero address.\\n     * - `from` must have a balance of at least `value`.\\n     * - the caller must have allowance for ``from``'s tokens of at least\\n     * `value`.\\n     */\\n    function transferFrom(address from, address to, uint256 value) public virtual returns (bool) {\\n        address spender = _msgSender();\\n        _spendAllowance(from, spender, value);\\n        _transfer(from, to, value);\\n        return true;\\n    }\\n\\n    /**\\n     * @dev Moves a `value` amount of tokens from `from` to `to`.\\n     *\\n     * This internal function is equivalent to {transfer}, and can be used to\\n     * e.g. implement automatic token fees, slashing mechanisms, etc.\\n     *\\n     * Emits a {Transfer} event.\\n     *\\n     * NOTE: This function is not virtual, {_update} should be overridden instead.\\n     */\\n    function _transfer(address from, address to, uint256 value) internal {\\n        if (from == address(0)) {\\n            revert ERC20InvalidSender(address(0));\\n        }\\n        if (to == address(0)) {\\n            revert ERC20InvalidReceiver(address(0));\\n        }\\n        _update(from, to, value);\\n    }\\n\\n    /**\\n     * @dev Transfers a `value` amount of tokens from `from` to `to`, or alternatively mints (or burns) if `from`\\n     * (or `to`) is the zero address. All customizations to transfers, mints, and burns should be done by overriding\\n     * this function.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function _update(address from, address to, uint256 value) internal virtual {\\n        if (from == address(0)) {\\n            // Overflow check required: The rest of the code assumes that totalSupply never overflows\\n            _totalSupply += value;\\n        } else {\\n            uint256 fromBalance = _balances[from];\\n            if (fromBalance < value) {\\n                revert ERC20InsufficientBalance(from, fromBalance, value);\\n            }\\n            unchecked {\\n                // Overflow not possible: value <= fromBalance <= totalSupply.\\n                _balances[from] = fromBalance - value;\\n            }\\n        }\\n\\n        if (to == address(0)) {\\n            unchecked {\\n                // Overflow not possible: value <= totalSupply or value <= fromBalance <= totalSupply.\\n                _totalSupply -= value;\\n            }\\n        } else {\\n            unchecked {\\n                // Overflow not possible: balance + value is at most totalSupply, which we know fits into a uint256.\\n                _balances[to] += value;\\n            }\\n        }\\n\\n        emit Transfer(from, to, value);\\n    }\\n\\n    /**\\n     * @dev Creates a `value` amount of tokens and assigns them to `account`, by transferring it from address(0).\\n     * Relies on the `_update` mechanism\\n     *\\n     * Emits a {Transfer} event with `from` set to the zero address.\\n     *\\n     * NOTE: This function is not virtual, {_update} should be overridden instead.\\n     */\\n    function _mint(address account, uint256 value) internal {\\n        if (account == address(0)) {\\n            revert ERC20InvalidReceiver(address(0));\\n        }\\n        _update(address(0), account, value);\\n    }\\n\\n    /**\\n     * @dev Destroys a `value` amount of tokens from `account`, lowering the total supply.\\n     * Relies on the `_update` mechanism.\\n     *\\n     * Emits a {Transfer} event with `to` set to the zero address.\\n     *\\n     * NOTE: This function is not virtual, {_update} should be overridden instead\\n     */\\n    function _burn(address account, uint256 value) internal {\\n        if (account == address(0)) {\\n            revert ERC20InvalidSender(address(0));\\n        }\\n        _update(account, address(0), value);\\n    }\\n\\n    /**\\n     * @dev Sets `value` as the allowance of `spender` over the `owner` s tokens.\\n     *\\n     * This internal function is equivalent to `approve`, and can be used to\\n     * e.g. set automatic allowances for certain subsystems, etc.\\n     *\\n     * Emits an {Approval} event.\\n     *\\n     * Requirements:\\n     *\\n     * - `owner` cannot be the zero address.\\n     * - `spender` cannot be the zero address.\\n     *\\n     * Overrides to this logic should be done to the variant with an additional `bool emitEvent` argument.\\n     */\\n    function _approve(address owner, address spender, uint256 value) internal {\\n        _approve(owner, spender, value, true);\\n    }\\n\\n    /**\\n     * @dev Variant of {_approve} with an optional flag to enable or disable the {Approval} event.\\n     *\\n     * By default (when calling {_approve}) the flag is set to true. On the other hand, approval changes made by\\n     * `_spendAllowance` during the `transferFrom` operation set the flag to false. This saves gas by not emitting any\\n     * `Approval` event during `transferFrom` operations.\\n     *\\n     * Anyone who wishes to continue emitting `Approval` events on the`transferFrom` operation can force the flag to\\n     * true using the following override:\\n     * ```\\n     * function _approve(address owner, address spender, uint256 value, bool) internal virtual override {\\n     *     super._approve(owner, spender, value, true);\\n     * }\\n     * ```\\n     *\\n     * Requirements are the same as {_approve}.\\n     */\\n    function _approve(address owner, address spender, uint256 value, bool emitEvent) internal virtual {\\n        if (owner == address(0)) {\\n            revert ERC20InvalidApprover(address(0));\\n        }\\n        if (spender == address(0)) {\\n            revert ERC20InvalidSpender(address(0));\\n        }\\n        _allowances[owner][spender] = value;\\n        if (emitEvent) {\\n            emit Approval(owner, spender, value);\\n        }\\n    }\\n\\n    /**\\n     * @dev Updates `owner` s allowance for `spender` based on spent `value`.\\n     *\\n     * Does not update the allowance value in case of infinite allowance.\\n     * Revert if not enough allowance is available.\\n     *\\n     * Does not emit an {Approval} event.\\n     */\\n    function _spendAllowance(address owner, address spender, uint256 value) internal virtual {\\n        uint256 currentAllowance = allowance(owner, spender);\\n        if (currentAllowance != type(uint256).max) {\\n            if (currentAllowance < value) {\\n                revert ERC20InsufficientAllowance(spender, currentAllowance, value);\\n            }\\n            unchecked {\\n                _approve(owner, spender, currentAllowance - value, false);\\n            }\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0xc3e1fa9d1987f8d349dfb4d6fe93bf2ca014b52ba335cfac30bfe71e357e6f80\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/IERC20.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Interface of the ERC20 standard as defined in the EIP.\\n */\\ninterface IERC20 {\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n\\n    /**\\n     * @dev Returns the value of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the value of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves a `value` amount of tokens from the caller's account to `to`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(address to, uint256 value) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(address owner, address spender) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets a `value` amount of tokens as the allowance of `spender` over the\\n     * caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 value) external returns (bool);\\n\\n    /**\\n     * @dev Moves a `value` amount of tokens from `from` to `to` using the\\n     * allowance mechanism. `value` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(address from, address to, uint256 value) external returns (bool);\\n}\\n\",\"keccak256\":\"0xc6a8ff0ea489379b61faa647490411b80102578440ab9d84e9a957cc12164e70\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/extensions/ERC20Burnable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {ERC20} from \\\"../ERC20.sol\\\";\\nimport {Context} from \\\"../../../utils/Context.sol\\\";\\n\\n/**\\n * @dev Extension of {ERC20} that allows token holders to destroy both their own\\n * tokens and those that they have an allowance for, in a way that can be\\n * recognized off-chain (via event analysis).\\n */\\nabstract contract ERC20Burnable is Context, ERC20 {\\n    /**\\n     * @dev Destroys a `value` amount of tokens from the caller.\\n     *\\n     * See {ERC20-_burn}.\\n     */\\n    function burn(uint256 value) public virtual {\\n        _burn(_msgSender(), value);\\n    }\\n\\n    /**\\n     * @dev Destroys a `value` amount of tokens from `account`, deducting from\\n     * the caller's allowance.\\n     *\\n     * See {ERC20-_burn} and {ERC20-allowance}.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have allowance for ``accounts``'s tokens of at least\\n     * `value`.\\n     */\\n    function burnFrom(address account, uint256 value) public virtual {\\n        _spendAllowance(account, _msgSender(), value);\\n        _burn(account, value);\\n    }\\n}\\n\",\"keccak256\":\"0x2659248df25e34000ed214b3dc8da2160bc39874c992b477d9e2b1b3283dc073\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/extensions/IERC20Metadata.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IERC20} from \\\"../IERC20.sol\\\";\\n\\n/**\\n * @dev Interface for the optional metadata functions from the ERC20 standard.\\n */\\ninterface IERC20Metadata is IERC20 {\\n    /**\\n     * @dev Returns the name of the token.\\n     */\\n    function name() external view returns (string memory);\\n\\n    /**\\n     * @dev Returns the symbol of the token.\\n     */\\n    function symbol() external view returns (string memory);\\n\\n    /**\\n     * @dev Returns the decimals places of the token.\\n     */\\n    function decimals() external view returns (uint8);\\n}\\n\",\"keccak256\":\"0xaa761817f6cd7892fcf158b3c776b34551cde36f48ff9703d53898bc45a94ea2\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/ReentrancyGuard.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/ReentrancyGuard.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Contract module that helps prevent reentrant calls to a function.\\n *\\n * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier\\n * available, which can be applied to functions to make sure there are no nested\\n * (reentrant) calls to them.\\n *\\n * Note that because there is a single `nonReentrant` guard, functions marked as\\n * `nonReentrant` may not call one another. This can be worked around by making\\n * those functions `private`, and then adding `external` `nonReentrant` entry\\n * points to them.\\n *\\n * TIP: If you would like to learn more about reentrancy and alternative ways\\n * to protect against it, check out our blog post\\n * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].\\n */\\nabstract contract ReentrancyGuard {\\n    // Booleans are more expensive than uint256 or any type that takes up a full\\n    // word because each write operation emits an extra SLOAD to first read the\\n    // slot's contents, replace the bits taken up by the boolean, and then write\\n    // back. This is the compiler's defense against contract upgrades and\\n    // pointer aliasing, and it cannot be disabled.\\n\\n    // The values being non-zero value makes deployment a bit more expensive,\\n    // but in exchange the refund on every call to nonReentrant will be lower in\\n    // amount. Since refunds are capped to a percentage of the total\\n    // transaction's gas, it is best to keep them low in cases like this one, to\\n    // increase the likelihood of the full refund coming into effect.\\n    uint256 private constant NOT_ENTERED = 1;\\n    uint256 private constant ENTERED = 2;\\n\\n    uint256 private _status;\\n\\n    /**\\n     * @dev Unauthorized reentrant call.\\n     */\\n    error ReentrancyGuardReentrantCall();\\n\\n    constructor() {\\n        _status = NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Prevents a contract from calling itself, directly or indirectly.\\n     * Calling a `nonReentrant` function from another `nonReentrant`\\n     * function is not supported. It is possible to prevent this from happening\\n     * by making the `nonReentrant` function external, and making it call a\\n     * `private` function that does the actual work.\\n     */\\n    modifier nonReentrant() {\\n        _nonReentrantBefore();\\n        _;\\n        _nonReentrantAfter();\\n    }\\n\\n    function _nonReentrantBefore() private {\\n        // On the first call to nonReentrant, _status will be NOT_ENTERED\\n        if (_status == ENTERED) {\\n            revert ReentrancyGuardReentrantCall();\\n        }\\n\\n        // Any calls to nonReentrant after this point will fail\\n        _status = ENTERED;\\n    }\\n\\n    function _nonReentrantAfter() private {\\n        // By storing the original value once again, a refund is triggered (see\\n        // https://eips.ethereum.org/EIPS/eip-2200)\\n        _status = NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Returns true if the reentrancy guard is currently set to \\\"entered\\\", which indicates there is a\\n     * `nonReentrant` function in the call stack.\\n     */\\n    function _reentrancyGuardEntered() internal view returns (bool) {\\n        return _status == ENTERED;\\n    }\\n}\\n\",\"keccak256\":\"0xf980daa263b661ab8ddee7d4fd833c7da7e7995e2c359ff1f17e67e4112f2236\",\"license\":\"MIT\"},\"contracts/CollaborativeArtCanvas.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\n// Import necessary OpenZeppelin contracts\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/ReentrancyGuard.sol\\\";\\nimport \\\"./PaintToken.sol\\\";\\n\\n/// @title CollaborativeArtCanvas\\n/// @notice A contract that allows users to collaboratively create pixel art by purchasing and setting pixel colors\\ncontract CollaborativeArtCanvas is Ownable, ReentrancyGuard {\\n    // Constants for canvas dimensions\\n    uint256 public constant CANVAS_WIDTH = 64;\\n    uint256 public constant CANVAS_HEIGHT = 64;\\n    uint256 public constant TOTAL_PIXELS = CANVAS_WIDTH * CANVAS_HEIGHT;\\n\\n    /// @notice Represents a pixel on the canvas\\n    struct Pixel {\\n        uint256 color;\\n    }\\n\\n    /// @notice Mapping from pixel ID to Pixel data\\n    mapping(uint256 => Pixel) public pixels;\\n\\n    /// @notice Emitted when a pixel's color is changed\\n    event PixelChanged(uint256 indexed pixelId, uint256 color);\\n\\n    /// @notice Emitted when a user purchases PaintTokens\\n    event PaintTokensPurchased(address indexed buyer, uint256 amount, uint256 totalPrice);\\n\\n    // Paint Token Variables\\n    uint256 public constant PAINT_TOKEN_PRICE = 30_000 gwei; // 0.00003 ether in wei\\n    uint256 public constant PAINT_TOKEN_SUPPLY = 10_000_000 * 10 ** 18; // Assuming 18 decimals\\n    uint256 private constant DECIMALS = 10 ** 18; // Token decimals\\n\\n    PaintToken public paintToken;\\n\\n    /// @notice Constructor that deploys the PaintToken contract and sets the initial owner\\n    /// @param initialOwner The address of the initial owner\\n    constructor(address initialOwner) Ownable(initialOwner) {\\n        // Deploy the PaintToken contract with the initial supply, owned by this contract\\n        paintToken = new PaintToken(PAINT_TOKEN_SUPPLY, address(this));\\n    }\\n\\n    /// @notice Allows users to purchase PaintTokens by sending ETH\\n    /// @param amount The number of PaintTokens to purchase (without decimals)\\n    function buyPaintTokens(uint256 amount) public payable nonReentrant {\\n        require(amount > 0, \\\"Amount must be greater than zero\\\");\\n        uint256 totalPrice = PAINT_TOKEN_PRICE * amount;\\n        require(msg.value >= totalPrice, \\\"Insufficient ETH sent\\\");\\n\\n        // Transfer PaintTokens to the buyer\\n        paintToken.transfer(msg.sender, amount * DECIMALS);\\n\\n        // Emit event for token purchase\\n        emit PaintTokensPurchased(msg.sender, amount * DECIMALS, totalPrice);\\n\\n        // Refund excess ETH, if any\\n        if (msg.value > totalPrice) {\\n            (bool success, ) = msg.sender.call{value: msg.value - totalPrice}(\\\"\\\");\\n            require(success, \\\"Refund failed\\\");\\n        }\\n    }\\n\\n    /// @notice Allows users to set the colors of multiple pixels on the canvas\\n    /// @param pixelIds An array of pixel IDs to set\\n    /// @param colors An array of colors corresponding to the pixel IDs\\n    function setPixelColors(uint256[] memory pixelIds, uint256[] memory colors) public nonReentrant {\\n        uint256 totalPixels = pixelIds.length;\\n        require(totalPixels > 0, \\\"No pixels to set\\\");\\n        require(totalPixels == colors.length, \\\"Mismatched array lengths\\\");\\n        require(totalPixels <= TOTAL_PIXELS, \\\"Cannot change more than 100 pixels at once\\\");\\n\\n        // Use a fixed-size array to track duplicates (since TOTAL_PIXELS is 4096)\\n        bool[4096] memory pixelIdUsed;\\n\\n        for (uint256 i = 0; i < totalPixels; i++) {\\n            uint256 pixelId = pixelIds[i];\\n            require(pixelId < TOTAL_PIXELS, \\\"Invalid pixel ID\\\");\\n            require(!pixelIdUsed[pixelId], \\\"Duplicate pixel ID detected\\\");\\n            pixelIdUsed[pixelId] = true;\\n        }\\n\\n        // Calculate the total number of tokens required\\n        uint256 requiredTokens = totalPixels * DECIMALS;\\n\\n        // Check if the user has enough PaintTokens\\n        require(paintToken.balanceOf(msg.sender) >= requiredTokens, \\\"Insufficient Paint tokens\\\");\\n\\n        // Users must approve the canvas contract to burn their tokens\\n        paintToken.burnFrom(msg.sender, requiredTokens);\\n\\n        // Set pixel colors and emit events\\n        for (uint256 i = 0; i < totalPixels; i++) {\\n            uint256 pixelId = pixelIds[i];\\n            uint256 color = colors[i];\\n            require(color <= 0xFFFFFF, \\\"Invalid color value\\\"); // Ensure color is a valid RGB value\\n\\n            pixels[pixelId].color = color;\\n            emit PixelChanged(pixelId, color);\\n        }\\n    }\\n\\n    /// @notice Retrieves the color of a specific pixel\\n    /// @param pixelId The ID of the pixel to retrieve\\n    /// @return The Pixel struct containing the color\\n    function getPixel(uint256 pixelId) public view returns (Pixel memory) {\\n        require(pixelId < TOTAL_PIXELS, \\\"Invalid pixel ID\\\");\\n        Pixel memory pixel = pixels[pixelId];\\n        if (pixel.color == 0) {\\n            pixel.color = 0xFFFFFF; // Default color (white) if not set\\n        }\\n        return pixel;\\n    }\\n\\n    /// @notice Returns an array of all pixel colors\\n    /// @return An array of pixel colors\\n    function getAllPixels() public view returns (uint256[] memory) {\\n        uint256[] memory allPixels = new uint256[](TOTAL_PIXELS);\\n        for (uint256 i = 0; i < TOTAL_PIXELS; i++) {\\n            allPixels[i] = pixels[i].color;\\n        }\\n        return allPixels;\\n    }\\n    /// @notice Allows the owner to withdraw all ETH from the contract\\n    function withdraw() public onlyOwner nonReentrant {\\n        uint256 balance = address(this).balance;\\n        (bool success, ) = owner().call{value: balance}(\\\"\\\");\\n        require(success, \\\"Withdrawal failed\\\");\\n    }\\n}\\n\",\"keccak256\":\"0x962d516c8d112c3930e05287b076ddd63279118ea8d48efa058f9ef69a69c6e6\",\"license\":\"MIT\"},\"contracts/PaintToken.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\n// Import ERC20Burnable for burn functionality and Ownable for access control\\nimport \\\"@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol\\\";\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\n\\n/// @title PaintToken\\n/// @notice ERC20 token used for purchasing pixels in the CollaborativeArtCanvas\\ncontract PaintToken is ERC20Burnable, Ownable {\\n    uint256 public immutable initialSupply;\\n\\n    /// @notice Constructor that mints the initial supply to the canvas contract and sets the owner\\n    /// @param _initialSupply The total supply of PaintToken\\n    /// @param canvasContract The address of the CollaborativeArtCanvas contract\\n    constructor(uint256 _initialSupply, address canvasContract)\\n        ERC20(\\\"Paint Token\\\", \\\"PAINT\\\")\\n        Ownable(canvasContract)\\n    {\\n        initialSupply = _initialSupply;\\n        _mint(canvasContract, _initialSupply);\\n        // Ownership is set to canvasContract via the Ownable constructor\\n    }\\n\\n    // Note: No public minting functions are exposed to prevent additional tokens from being minted\\n}\\n\",\"keccak256\":\"0xe5383a0026707e9ca9fc30a0551058cb5d455b022949350bf86aa6bfa3cdd5ed\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50604051611e57380380611e5783398101604081905261002f9161013b565b806001600160a01b03811661005e57604051631e4fbdf760e01b81526000600482015260240160405180910390fd5b610067816100de565b50600180556040516a084595161401484a0000009030906100879061012e565b9182526001600160a01b03166020820152604001604051809103906000f0801580156100b7573d6000803e3d6000fd5b50600380546001600160a01b0319166001600160a01b03929092169190911790555061016b565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b610df08061106783390190565b60006020828403121561014d57600080fd5b81516001600160a01b038116811461016457600080fd5b9392505050565b610eed8061017a6000396000f3fe6080604052600436106100e85760003560e01c80638da7f2321161008a578063d77544ef11610059578063d77544ef14610252578063eceb054f14610272578063ed4127df14610187578063f2fde38b1461029257600080fd5b80638da7f232146101ce578063a29497c2146101fb578063b4f80eb914610210578063b9e046b01461023f57600080fd5b806370d72d63116100c657806370d72d6314610150578063715018a61461017257806371bf439e146101875780638da5cb5b1461019c57600080fd5b80633503a8bf146100ed5780633ccfd60b1461011a5780633db1323a14610131575b600080fd5b3480156100f957600080fd5b50610107651b48eb57e00081565b6040519081526020015b60405180910390f35b34801561012657600080fd5b5061012f6102b2565b005b34801561013d57600080fd5b506101076a084595161401484a00000081565b34801561015c57600080fd5b5061016561037d565b6040516101119190610c6b565b34801561017e57600080fd5b5061012f61042b565b34801561019357600080fd5b50610107604081565b3480156101a857600080fd5b506000546001600160a01b03165b6040516001600160a01b039091168152602001610111565b3480156101da57600080fd5b506101076101e9366004610caf565b60026020526000908152604090205481565b34801561020757600080fd5b5061010761043d565b34801561021c57600080fd5b5061023061022b366004610caf565b61044b565b60405190518152602001610111565b61012f61024d366004610caf565b6104d7565b34801561025e57600080fd5b506003546101b6906001600160a01b031681565b34801561027e57600080fd5b5061012f61028d366004610d79565b610710565b34801561029e57600080fd5b5061012f6102ad366004610ddd565b610b68565b6102ba610ba3565b6102c2610bd0565b4760006102d76000546001600160a01b031690565b6001600160a01b03168260405160006040518083038185875af1925050503d8060008114610321576040519150601f19603f3d011682016040523d82523d6000602084013e610326565b606091505b50509050806103705760405162461bcd60e51b815260206004820152601160248201527015da5d1a191c985dd85b0819985a5b1959607a1b60448201526064015b60405180910390fd5b505061037b60018055565b565b6060600061038c604080610e23565b67ffffffffffffffff8111156103a4576103a4610cc8565b6040519080825280602002602001820160405280156103cd578160200160208202803683370190505b50905060005b6103de604080610e23565b81101561042557600081815260026020526040902054825183908390811061040857610408610e3a565b60209081029190910101528061041d81610e50565b9150506103d3565b50919050565b610433610ba3565b61037b6000610bfa565b610448604080610e23565b81565b604080516020810190915260008152610465604080610e23565b82106104a65760405162461bcd60e51b815260206004820152601060248201526f125b9d985b1a59081c1a5e195b08125160821b6044820152606401610367565b60008281526002602090815260408083208151928301909152548082529091036104d15762ffffff81525b92915050565b6104df610bd0565b6000811161052f5760405162461bcd60e51b815260206004820181905260248201527f416d6f756e74206d7573742062652067726561746572207468616e207a65726f6044820152606401610367565b600061054182651b48eb57e000610e23565b90508034101561058b5760405162461bcd60e51b8152602060048201526015602482015274125b9cdd59999a58da595b9d08115512081cd95b9d605a1b6044820152606401610367565b6003546001600160a01b031663a9059cbb336105af670de0b6b3a764000086610e23565b6040516001600160e01b031960e085901b1681526001600160a01b03909216600483015260248201526044016020604051808303816000875af11580156105fa573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061061e9190610e69565b50337fc5379320cffff97ac4c1d6d8999bfbdbc6158d3a27dd7d3d4ec42091479919b0610653670de0b6b3a764000085610e23565b60408051918252602082018590520160405180910390a2803411156107035760003361067f8334610e8b565b604051600081818185875af1925050503d80600081146106bb576040519150601f19603f3d011682016040523d82523d6000602084013e6106c0565b606091505b50509050806107015760405162461bcd60e51b815260206004820152600d60248201526c1499599d5b990819985a5b1959609a1b6044820152606401610367565b505b5061070d60018055565b50565b610718610bd0565b81518061075a5760405162461bcd60e51b815260206004820152601060248201526f139bc81c1a5e195b1cc81d1bc81cd95d60821b6044820152606401610367565b815181146107aa5760405162461bcd60e51b815260206004820152601860248201527f4d69736d617463686564206172726179206c656e6774687300000000000000006044820152606401610367565b6107b5604080610e23565b8111156108175760405162461bcd60e51b815260206004820152602a60248201527f43616e6e6f74206368616e6765206d6f7265207468616e2031303020706978656044820152696c73206174206f6e636560b01b6064820152608401610367565b61081f610c4a565b60005b8281101561092d57600085828151811061083e5761083e610e3a565b602002602001015190506040806108559190610e23565b81106108965760405162461bcd60e51b815260206004820152601060248201526f125b9d985b1a59081c1a5e195b08125160821b6044820152606401610367565b828161100081106108a9576108a9610e3a565b6020020151156108fb5760405162461bcd60e51b815260206004820152601b60248201527f4475706c696361746520706978656c20494420646574656374656400000000006044820152606401610367565b60018382611000811061091057610910610e3a565b91151560209092020152508061092581610e50565b915050610822565b506000610942670de0b6b3a764000084610e23565b6003546040516370a0823160e01b815233600482015291925082916001600160a01b03909116906370a0823190602401602060405180830381865afa15801561098f573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109b39190610e9e565b1015610a015760405162461bcd60e51b815260206004820152601960248201527f496e73756666696369656e74205061696e7420746f6b656e73000000000000006044820152606401610367565b60035460405163079cc67960e41b8152336004820152602481018390526001600160a01b03909116906379cc679090604401600060405180830381600087803b158015610a4d57600080fd5b505af1158015610a61573d6000803e3d6000fd5b5050505060005b83811015610b57576000868281518110610a8457610a84610e3a565b602002602001015190506000868381518110610aa257610aa2610e3a565b6020026020010151905062ffffff811115610af55760405162461bcd60e51b8152602060048201526013602482015272496e76616c696420636f6c6f722076616c756560681b6044820152606401610367565b600082815260026020526040908190208290555182907f7972cf16996fc8b909d4dfface0139ef018c9f639f60bc0047146a281f15337190610b3a9084815260200190565b60405180910390a250508080610b4f90610e50565b915050610a68565b50505050610b6460018055565b5050565b610b70610ba3565b6001600160a01b038116610b9a57604051631e4fbdf760e01b815260006004820152602401610367565b61070d81610bfa565b6000546001600160a01b0316331461037b5760405163118cdaa760e01b8152336004820152602401610367565b600260015403610bf357604051633ee5aeb560e01b815260040160405180910390fd5b6002600155565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60405180620200000160405280611000906020820280368337509192915050565b6020808252825182820181905260009190848201906040850190845b81811015610ca357835183529284019291840191600101610c87565b50909695505050505050565b600060208284031215610cc157600080fd5b5035919050565b634e487b7160e01b600052604160045260246000fd5b600082601f830112610cef57600080fd5b8135602067ffffffffffffffff80831115610d0c57610d0c610cc8565b8260051b604051601f19603f83011681018181108482111715610d3157610d31610cc8565b604052938452858101830193838101925087851115610d4f57600080fd5b83870191505b84821015610d6e57813583529183019190830190610d55565b979650505050505050565b60008060408385031215610d8c57600080fd5b823567ffffffffffffffff80821115610da457600080fd5b610db086838701610cde565b93506020850135915080821115610dc657600080fd5b50610dd385828601610cde565b9150509250929050565b600060208284031215610def57600080fd5b81356001600160a01b0381168114610e0657600080fd5b9392505050565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176104d1576104d1610e0d565b634e487b7160e01b600052603260045260246000fd5b600060018201610e6257610e62610e0d565b5060010190565b600060208284031215610e7b57600080fd5b81518015158114610e0657600080fd5b818103818111156104d1576104d1610e0d565b600060208284031215610eb057600080fd5b505191905056fea26469706673582212203d91f9a897a31a780f0e64b3a39f7cbf0c571f6a31a79c6a1b48fe4bf6b17d8264736f6c6343000814003360a06040523480156200001157600080fd5b5060405162000df038038062000df08339810160408190526200003491620002b2565b806040518060400160405280600b81526020016a2830b4b73a102a37b5b2b760a91b81525060405180604001604052806005815260200164141052539560da1b815250816003908162000088919062000396565b50600462000097828262000396565b5050506001600160a01b038116620000ca57604051631e4fbdf760e01b8152600060048201526024015b60405180910390fd5b620000d581620000ef565b506080829052620000e7818362000141565b50506200048a565b600580546001600160a01b038381166001600160a01b0319831681179093556040519116919082907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a35050565b6001600160a01b0382166200016d5760405163ec442f0560e01b815260006004820152602401620000c1565b6200017b600083836200017f565b5050565b6001600160a01b038316620001ae578060026000828254620001a2919062000462565b90915550620002229050565b6001600160a01b03831660009081526020819052604090205481811015620002035760405163391434e360e21b81526001600160a01b03851660048201526024810182905260448101839052606401620000c1565b6001600160a01b03841660009081526020819052604090209082900390555b6001600160a01b03821662000240576002805482900390556200025f565b6001600160a01b03821660009081526020819052604090208054820190555b816001600160a01b0316836001600160a01b03167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef83604051620002a591815260200190565b60405180910390a3505050565b60008060408385031215620002c657600080fd5b825160208401519092506001600160a01b0381168114620002e657600080fd5b809150509250929050565b634e487b7160e01b600052604160045260246000fd5b600181811c908216806200031c57607f821691505b6020821081036200033d57634e487b7160e01b600052602260045260246000fd5b50919050565b601f8211156200039157600081815260208120601f850160051c810160208610156200036c5750805b601f850160051c820191505b818110156200038d5782815560010162000378565b5050505b505050565b81516001600160401b03811115620003b257620003b2620002f1565b620003ca81620003c3845462000307565b8462000343565b602080601f831160018114620004025760008415620003e95750858301515b600019600386901b1c1916600185901b1785556200038d565b600085815260208120601f198616915b82811015620004335788860151825594840194600190910190840162000412565b5085821015620004525787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b808201808211156200048457634e487b7160e01b600052601160045260246000fd5b92915050565b60805161094a620004a66000396000610174015261094a6000f3fe608060405234801561001057600080fd5b50600436106100f55760003560e01c806370a082311161009757806395d89b411161006657806395d89b411461020a578063a9059cbb14610212578063dd62ed3e14610225578063f2fde38b1461025e57600080fd5b806370a08231146101ab578063715018a6146101d457806379cc6790146101dc5780638da5cb5b146101ef57600080fd5b806323b872dd116100d357806323b872dd1461014d578063313ce56714610160578063378dc3dc1461016f57806342966c681461019657600080fd5b806306fdde03146100fa578063095ea7b31461011857806318160ddd1461013b575b600080fd5b610102610271565b60405161010f919061077b565b60405180910390f35b61012b6101263660046107e5565b610303565b604051901515815260200161010f565b6002545b60405190815260200161010f565b61012b61015b36600461080f565b61031d565b6040516012815260200161010f565b61013f7f000000000000000000000000000000000000000000000000000000000000000081565b6101a96101a436600461084b565b610341565b005b61013f6101b9366004610864565b6001600160a01b031660009081526020819052604090205490565b6101a961034e565b6101a96101ea3660046107e5565b610362565b6005546040516001600160a01b03909116815260200161010f565b61010261037b565b61012b6102203660046107e5565b61038a565b61013f610233366004610886565b6001600160a01b03918216600090815260016020908152604080832093909416825291909152205490565b6101a961026c366004610864565b610398565b606060038054610280906108b9565b80601f01602080910402602001604051908101604052809291908181526020018280546102ac906108b9565b80156102f95780601f106102ce576101008083540402835291602001916102f9565b820191906000526020600020905b8154815290600101906020018083116102dc57829003601f168201915b5050505050905090565b6000336103118185856103d8565b60019150505b92915050565b60003361032b8582856103ea565b610336858585610468565b506001949350505050565b61034b33826104c7565b50565b6103566104fd565b610360600061052a565b565b61036d8233836103ea565b61037782826104c7565b5050565b606060048054610280906108b9565b600033610311818585610468565b6103a06104fd565b6001600160a01b0381166103cf57604051631e4fbdf760e01b8152600060048201526024015b60405180910390fd5b61034b8161052a565b6103e5838383600161057c565b505050565b6001600160a01b038381166000908152600160209081526040808320938616835292905220546000198114610462578181101561045357604051637dc7a0d960e11b81526001600160a01b038416600482015260248101829052604481018390526064016103c6565b6104628484848403600061057c565b50505050565b6001600160a01b03831661049257604051634b637e8f60e11b8152600060048201526024016103c6565b6001600160a01b0382166104bc5760405163ec442f0560e01b8152600060048201526024016103c6565b6103e5838383610651565b6001600160a01b0382166104f157604051634b637e8f60e11b8152600060048201526024016103c6565b61037782600083610651565b6005546001600160a01b031633146103605760405163118cdaa760e01b81523360048201526024016103c6565b600580546001600160a01b038381166001600160a01b0319831681179093556040519116919082907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a35050565b6001600160a01b0384166105a65760405163e602df0560e01b8152600060048201526024016103c6565b6001600160a01b0383166105d057604051634a1406b160e11b8152600060048201526024016103c6565b6001600160a01b038085166000908152600160209081526040808320938716835292905220829055801561046257826001600160a01b0316846001600160a01b03167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b9258460405161064391815260200190565b60405180910390a350505050565b6001600160a01b03831661067c57806002600082825461067191906108f3565b909155506106ee9050565b6001600160a01b038316600090815260208190526040902054818110156106cf5760405163391434e360e21b81526001600160a01b038516600482015260248101829052604481018390526064016103c6565b6001600160a01b03841660009081526020819052604090209082900390555b6001600160a01b03821661070a57600280548290039055610729565b6001600160a01b03821660009081526020819052604090208054820190555b816001600160a01b0316836001600160a01b03167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef8360405161076e91815260200190565b60405180910390a3505050565b600060208083528351808285015260005b818110156107a85785810183015185820160400152820161078c565b506000604082860101526040601f19601f8301168501019250505092915050565b80356001600160a01b03811681146107e057600080fd5b919050565b600080604083850312156107f857600080fd5b610801836107c9565b946020939093013593505050565b60008060006060848603121561082457600080fd5b61082d846107c9565b925061083b602085016107c9565b9150604084013590509250925092565b60006020828403121561085d57600080fd5b5035919050565b60006020828403121561087657600080fd5b61087f826107c9565b9392505050565b6000806040838503121561089957600080fd5b6108a2836107c9565b91506108b0602084016107c9565b90509250929050565b600181811c908216806108cd57607f821691505b6020821081036108ed57634e487b7160e01b600052602260045260246000fd5b50919050565b8082018082111561031757634e487b7160e01b600052601160045260246000fdfea26469706673582212209268d908f72d0e04cb43f0b95d6656bb9121265a3608842d90861de3004ee0aa64736f6c63430008140033",
+  "deployedBytecode": "0x6080604052600436106100e85760003560e01c80638da7f2321161008a578063d77544ef11610059578063d77544ef14610252578063eceb054f14610272578063ed4127df14610187578063f2fde38b1461029257600080fd5b80638da7f232146101ce578063a29497c2146101fb578063b4f80eb914610210578063b9e046b01461023f57600080fd5b806370d72d63116100c657806370d72d6314610150578063715018a61461017257806371bf439e146101875780638da5cb5b1461019c57600080fd5b80633503a8bf146100ed5780633ccfd60b1461011a5780633db1323a14610131575b600080fd5b3480156100f957600080fd5b50610107651b48eb57e00081565b6040519081526020015b60405180910390f35b34801561012657600080fd5b5061012f6102b2565b005b34801561013d57600080fd5b506101076a084595161401484a00000081565b34801561015c57600080fd5b5061016561037d565b6040516101119190610c6b565b34801561017e57600080fd5b5061012f61042b565b34801561019357600080fd5b50610107604081565b3480156101a857600080fd5b506000546001600160a01b03165b6040516001600160a01b039091168152602001610111565b3480156101da57600080fd5b506101076101e9366004610caf565b60026020526000908152604090205481565b34801561020757600080fd5b5061010761043d565b34801561021c57600080fd5b5061023061022b366004610caf565b61044b565b60405190518152602001610111565b61012f61024d366004610caf565b6104d7565b34801561025e57600080fd5b506003546101b6906001600160a01b031681565b34801561027e57600080fd5b5061012f61028d366004610d79565b610710565b34801561029e57600080fd5b5061012f6102ad366004610ddd565b610b68565b6102ba610ba3565b6102c2610bd0565b4760006102d76000546001600160a01b031690565b6001600160a01b03168260405160006040518083038185875af1925050503d8060008114610321576040519150601f19603f3d011682016040523d82523d6000602084013e610326565b606091505b50509050806103705760405162461bcd60e51b815260206004820152601160248201527015da5d1a191c985dd85b0819985a5b1959607a1b60448201526064015b60405180910390fd5b505061037b60018055565b565b6060600061038c604080610e23565b67ffffffffffffffff8111156103a4576103a4610cc8565b6040519080825280602002602001820160405280156103cd578160200160208202803683370190505b50905060005b6103de604080610e23565b81101561042557600081815260026020526040902054825183908390811061040857610408610e3a565b60209081029190910101528061041d81610e50565b9150506103d3565b50919050565b610433610ba3565b61037b6000610bfa565b610448604080610e23565b81565b604080516020810190915260008152610465604080610e23565b82106104a65760405162461bcd60e51b815260206004820152601060248201526f125b9d985b1a59081c1a5e195b08125160821b6044820152606401610367565b60008281526002602090815260408083208151928301909152548082529091036104d15762ffffff81525b92915050565b6104df610bd0565b6000811161052f5760405162461bcd60e51b815260206004820181905260248201527f416d6f756e74206d7573742062652067726561746572207468616e207a65726f6044820152606401610367565b600061054182651b48eb57e000610e23565b90508034101561058b5760405162461bcd60e51b8152602060048201526015602482015274125b9cdd59999a58da595b9d08115512081cd95b9d605a1b6044820152606401610367565b6003546001600160a01b031663a9059cbb336105af670de0b6b3a764000086610e23565b6040516001600160e01b031960e085901b1681526001600160a01b03909216600483015260248201526044016020604051808303816000875af11580156105fa573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061061e9190610e69565b50337fc5379320cffff97ac4c1d6d8999bfbdbc6158d3a27dd7d3d4ec42091479919b0610653670de0b6b3a764000085610e23565b60408051918252602082018590520160405180910390a2803411156107035760003361067f8334610e8b565b604051600081818185875af1925050503d80600081146106bb576040519150601f19603f3d011682016040523d82523d6000602084013e6106c0565b606091505b50509050806107015760405162461bcd60e51b815260206004820152600d60248201526c1499599d5b990819985a5b1959609a1b6044820152606401610367565b505b5061070d60018055565b50565b610718610bd0565b81518061075a5760405162461bcd60e51b815260206004820152601060248201526f139bc81c1a5e195b1cc81d1bc81cd95d60821b6044820152606401610367565b815181146107aa5760405162461bcd60e51b815260206004820152601860248201527f4d69736d617463686564206172726179206c656e6774687300000000000000006044820152606401610367565b6107b5604080610e23565b8111156108175760405162461bcd60e51b815260206004820152602a60248201527f43616e6e6f74206368616e6765206d6f7265207468616e2031303020706978656044820152696c73206174206f6e636560b01b6064820152608401610367565b61081f610c4a565b60005b8281101561092d57600085828151811061083e5761083e610e3a565b602002602001015190506040806108559190610e23565b81106108965760405162461bcd60e51b815260206004820152601060248201526f125b9d985b1a59081c1a5e195b08125160821b6044820152606401610367565b828161100081106108a9576108a9610e3a565b6020020151156108fb5760405162461bcd60e51b815260206004820152601b60248201527f4475706c696361746520706978656c20494420646574656374656400000000006044820152606401610367565b60018382611000811061091057610910610e3a565b91151560209092020152508061092581610e50565b915050610822565b506000610942670de0b6b3a764000084610e23565b6003546040516370a0823160e01b815233600482015291925082916001600160a01b03909116906370a0823190602401602060405180830381865afa15801561098f573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109b39190610e9e565b1015610a015760405162461bcd60e51b815260206004820152601960248201527f496e73756666696369656e74205061696e7420746f6b656e73000000000000006044820152606401610367565b60035460405163079cc67960e41b8152336004820152602481018390526001600160a01b03909116906379cc679090604401600060405180830381600087803b158015610a4d57600080fd5b505af1158015610a61573d6000803e3d6000fd5b5050505060005b83811015610b57576000868281518110610a8457610a84610e3a565b602002602001015190506000868381518110610aa257610aa2610e3a565b6020026020010151905062ffffff811115610af55760405162461bcd60e51b8152602060048201526013602482015272496e76616c696420636f6c6f722076616c756560681b6044820152606401610367565b600082815260026020526040908190208290555182907f7972cf16996fc8b909d4dfface0139ef018c9f639f60bc0047146a281f15337190610b3a9084815260200190565b60405180910390a250508080610b4f90610e50565b915050610a68565b50505050610b6460018055565b5050565b610b70610ba3565b6001600160a01b038116610b9a57604051631e4fbdf760e01b815260006004820152602401610367565b61070d81610bfa565b6000546001600160a01b0316331461037b5760405163118cdaa760e01b8152336004820152602401610367565b600260015403610bf357604051633ee5aeb560e01b815260040160405180910390fd5b6002600155565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60405180620200000160405280611000906020820280368337509192915050565b6020808252825182820181905260009190848201906040850190845b81811015610ca357835183529284019291840191600101610c87565b50909695505050505050565b600060208284031215610cc157600080fd5b5035919050565b634e487b7160e01b600052604160045260246000fd5b600082601f830112610cef57600080fd5b8135602067ffffffffffffffff80831115610d0c57610d0c610cc8565b8260051b604051601f19603f83011681018181108482111715610d3157610d31610cc8565b604052938452858101830193838101925087851115610d4f57600080fd5b83870191505b84821015610d6e57813583529183019190830190610d55565b979650505050505050565b60008060408385031215610d8c57600080fd5b823567ffffffffffffffff80821115610da457600080fd5b610db086838701610cde565b93506020850135915080821115610dc657600080fd5b50610dd385828601610cde565b9150509250929050565b600060208284031215610def57600080fd5b81356001600160a01b0381168114610e0657600080fd5b9392505050565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176104d1576104d1610e0d565b634e487b7160e01b600052603260045260246000fd5b600060018201610e6257610e62610e0d565b5060010190565b600060208284031215610e7b57600080fd5b81518015158114610e0657600080fd5b818103818111156104d1576104d1610e0d565b600060208284031215610eb057600080fd5b505191905056fea26469706673582212203d91f9a897a31a780f0e64b3a39f7cbf0c571f6a31a79c6a1b48fe4bf6b17d8264736f6c63430008140033",
+  "devdoc": {
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ],
+      "ReentrancyGuardReentrantCall()": [
+        {
+          "details": "Unauthorized reentrant call."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "buyPaintTokens(uint256)": {
+        "params": {
+          "amount": "The number of PaintTokens to purchase (without decimals)"
+        }
+      },
+      "constructor": {
+        "params": {
+          "initialOwner": "The address of the initial owner"
+        }
+      },
+      "getAllPixels()": {
+        "returns": {
+          "_0": "An array of pixel colors"
+        }
+      },
+      "getPixel(uint256)": {
+        "params": {
+          "pixelId": "The ID of the pixel to retrieve"
+        },
+        "returns": {
+          "_0": "The Pixel struct containing the color"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "setPixelColors(uint256[],uint256[])": {
+        "params": {
+          "colors": "An array of colors corresponding to the pixel IDs",
+          "pixelIds": "An array of pixel IDs to set"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "title": "CollaborativeArtCanvas",
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "PaintTokensPurchased(address,uint256,uint256)": {
+        "notice": "Emitted when a user purchases PaintTokens"
+      },
+      "PixelChanged(uint256,uint256)": {
+        "notice": "Emitted when a pixel's color is changed"
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "buyPaintTokens(uint256)": {
+        "notice": "Allows users to purchase PaintTokens by sending ETH"
+      },
+      "constructor": {
+        "notice": "Constructor that deploys the PaintToken contract and sets the initial owner"
+      },
+      "getAllPixels()": {
+        "notice": "Returns an array of all pixel colors"
+      },
+      "getPixel(uint256)": {
+        "notice": "Retrieves the color of a specific pixel"
+      },
+      "pixels(uint256)": {
+        "notice": "Mapping from pixel ID to Pixel data"
+      },
+      "setPixelColors(uint256[],uint256[])": {
+        "notice": "Allows users to set the colors of multiple pixels on the canvas"
+      },
+      "withdraw()": {
+        "notice": "Allows the owner to withdraw all ETH from the contract"
+      }
+    },
+    "notice": "A contract that allows users to collaboratively create pixel art by purchasing and setting pixel colors",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 8,
+        "contract": "contracts/CollaborativeArtCanvas.sol:CollaborativeArtCanvas",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 990,
+        "contract": "contracts/CollaborativeArtCanvas.sol:CollaborativeArtCanvas",
+        "label": "_status",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 1079,
+        "contract": "contracts/CollaborativeArtCanvas.sol:CollaborativeArtCanvas",
+        "label": "pixels",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_uint256,t_struct(Pixel)1073_storage)"
+      },
+      {
+        "astId": 1113,
+        "contract": "contracts/CollaborativeArtCanvas.sol:CollaborativeArtCanvas",
+        "label": "paintToken",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_contract(PaintToken)1512"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_contract(PaintToken)1512": {
+        "encoding": "inplace",
+        "label": "contract PaintToken",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_uint256,t_struct(Pixel)1073_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct CollaborativeArtCanvas.Pixel)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Pixel)1073_storage"
+      },
+      "t_struct(Pixel)1073_storage": {
+        "encoding": "inplace",
+        "label": "struct CollaborativeArtCanvas.Pixel",
+        "members": [
+          {
+            "astId": 1072,
+            "contract": "contracts/CollaborativeArtCanvas.sol:CollaborativeArtCanvas",
+            "label": "color",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "32"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
