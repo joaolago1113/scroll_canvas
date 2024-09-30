@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import CollaborativeArtCanvas from '../components/CollaborativeArtCanvas';
+import CollaborativeArtCanvas from "../components/CollaborativeArtCanvas";
 
 export default function Home() {
   return (

@@ -21,7 +21,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
     autoMine: true,
   });
-
+/*
   // Deploy the PaintToken contract, passing the CollaborativeArtCanvas address as the constructor argument
   await deploy("PaintToken", {
     from: deployer,
@@ -29,6 +29,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true,
     autoMine: true,
   });
+
+  */
 };
 
 export default func;

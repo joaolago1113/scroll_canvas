@@ -1,20 +1,19 @@
 "use client";
 
 import React, { useCallback, useRef, useState } from "react";
+import { Fragment, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Address } from "viem";
+import { formatEther } from "viem";
+import { useAccount } from "wagmi";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
-import { useEffect, Fragment } from 'react';
-
-import { useAccount } from "wagmi";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
-import { Address } from "viem";
-import { formatEther } from "viem";
 
 type HeaderMenuLink = {
   label: string;
@@ -32,7 +31,6 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
-  
 ];
 
 export const HeaderMenuLinks = () => {
@@ -141,7 +139,9 @@ export const Header = () => {
         {address && (
           <div className="flex flex-col items-end ml-1">
             <div className="font-bold">Your Paint Tokens: {paintTokenBalance?.toString()}</div>
-            <div className="text-sm">Total Supply: {paintTokenTotalSupply ? formatEther(paintTokenTotalSupply) : "..."}</div>
+            <div className="text-sm">
+              Total Supply: {paintTokenTotalSupply ? formatEther(paintTokenTotalSupply) : "..."}
+            </div>
           </div>
         )}
       </div>

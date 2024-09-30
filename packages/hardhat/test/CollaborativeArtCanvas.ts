@@ -25,9 +25,9 @@ describe('CollaborativeArtCanvas', function () {
   });
 
   it('Should have correct canvas dimensions', async function () {
-    expect(await collaborativeArtCanvas.CANVAS_WIDTH()).to.equal(32);
-    expect(await collaborativeArtCanvas.CANVAS_HEIGHT()).to.equal(32);
-    expect(await collaborativeArtCanvas.TOTAL_PIXELS()).to.equal(1024);
+    expect(await collaborativeArtCanvas.CANVAS_WIDTH()).to.equal(64);
+    expect(await collaborativeArtCanvas.CANVAS_HEIGHT()).to.equal(64);
+    expect(await collaborativeArtCanvas.TOTAL_PIXELS()).to.equal(4096);
   });
 
   it('Should allow setting multiple pixel colors', async function () {
@@ -61,7 +61,7 @@ describe('CollaborativeArtCanvas', function () {
   });
 
   it('Should not allow setting colors for invalid pixel IDs', async function () {
-    const invalidPixelId = 1024; // Total pixels is 1024, so this is out of bounds
+    const invalidPixelId = 4096; // Total pixels is 1024, so this is out of bounds
     const colors = [0xff0000];
     const amount = 1;
     const totalPrice = ethers.parseEther('0.00003') * BigInt(amount);
@@ -140,5 +140,23 @@ describe('CollaborativeArtCanvas', function () {
       .withArgs(addr1.address, ethers.ZeroAddress, amountWithDecimals);
 
     expect(await paintToken.balanceOf(addr1.address)).to.equal(0n);
+  });
+
+  it('Should transfer paint tokens to the caller when buying paint tokens', async function () {
+    const amount = 100;
+    const totalPrice = ethers.parseEther('0.00003') * BigInt(amount);
+    const decimals = await paintToken.decimals();
+    const amountWithDecimals = BigInt(amount) * BigInt(10) ** BigInt(decimals);
+
+    const initialBalance = await paintToken.balanceOf(addr1.address);
+
+    await expect(
+      collaborativeArtCanvas.connect(addr1).buyPaintTokens(amount, { value: totalPrice }),
+    )
+      .to.emit(paintToken, 'Transfer')
+      .withArgs(await collaborativeArtCanvas.getAddress(), addr1.address, amountWithDecimals);
+
+    const finalBalance = await paintToken.balanceOf(addr1.address);
+    expect(finalBalance).to.equal(BigInt(initialBalance) + (amountWithDecimals));
   });
 });

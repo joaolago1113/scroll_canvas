@@ -71,8 +71,8 @@ contract CollaborativeArtCanvas is Ownable, ReentrancyGuard {
         require(totalPixels == colors.length, "Mismatched array lengths");
         require(totalPixels <= TOTAL_PIXELS, "Cannot change more than 100 pixels at once");
 
-        // Use a fixed-size array to track duplicates (since TOTAL_PIXELS is 1024)
-        bool[1024] memory pixelIdUsed;
+        // Use a fixed-size array to track duplicates (since TOTAL_PIXELS is 4096)
+        bool[4096] memory pixelIdUsed;
 
         for (uint256 i = 0; i < totalPixels; i++) {
             uint256 pixelId = pixelIds[i];
@@ -113,6 +113,15 @@ contract CollaborativeArtCanvas is Ownable, ReentrancyGuard {
         return pixel;
     }
 
+    /// @notice Returns an array of all pixel colors
+    /// @return An array of pixel colors
+    function getAllPixels() public view returns (uint256[] memory) {
+        uint256[] memory allPixels = new uint256[](TOTAL_PIXELS);
+        for (uint256 i = 0; i < TOTAL_PIXELS; i++) {
+            allPixels[i] = pixels[i].color;
+        }
+        return allPixels;
+    }
     /// @notice Allows the owner to withdraw all ETH from the contract
     function withdraw() public onlyOwner nonReentrant {
         uint256 balance = address(this).balance;

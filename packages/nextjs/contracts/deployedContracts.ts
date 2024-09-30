@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     CollaborativeArtCanvas: {
-      address: "0xCace1b78160AE76398F486c8a18044da0d66d86D",
+      address: "0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f",
       abi: [
         {
           inputs: [
@@ -189,6 +189,19 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [],
+          name: "getAllPixels",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [
             {
               internalType: "uint256",
@@ -312,7 +325,7 @@ const deployedContracts = {
       },
     },
     PaintToken: {
-      address: "0xD5ac451B0c50B9476107823Af206eD814a2e2580",
+      address: "0xCDf5F7dfd18b9A7D668d2BcA5CdCAA64565c321A",
       abi: [
         {
           inputs: [
