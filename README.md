@@ -2,7 +2,7 @@
 
 **CollaborativeArtCanvas** is a decentralized platform that empowers users to collaboratively create vibrant pixel art on a 64x64 canvas. Participants can paint individual pixels or upload entire images, utilizing **PaintTokens**—an ERC20-based cryptocurrency—to purchase and set pixel colors. The system leverages smart contracts deployed on the **Scroll** mainnet to manage token transactions and ensure secure, ownership-based modifications of the canvas. This seamless integration of blockchain technology fosters a community-driven art experience, allowing anyone to contribute to and own a piece of the collective masterpiece.
 
-You can access the Dapp right now at https://joaolago1113.github.io/scroll_canvas
+You can access the Dapp right now at https://scroll-canvas-nextjs.vercel.app/
 
 ---
 
