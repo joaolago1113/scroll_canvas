@@ -76,7 +76,7 @@ export const Header = () => {
                 Your Paint Tokens
               </div>
             </div>
-            <div className="bg-blue-700 bg-opacity-50 rounded-lg p-2 shadow-md">
+            <div className="hidden lg:block bg-blue-700 bg-opacity-50 rounded-lg p-2 shadow-md">
               <div className="font-bold text-green-300">
                 {(Number(paintTokenTotalSupply) / 10 ** 18).toFixed(0)} 🖌️
               </div>
