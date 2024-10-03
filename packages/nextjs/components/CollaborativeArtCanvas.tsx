@@ -700,10 +700,11 @@ export default function CollaborativeArtCanvas() {
                   maxWidth: '100%',
                   maxHeight: 'calc(100vh - 200px)',
                 }}
-                onMouseDown={handleCanvasMouseDown}
-                onMouseMove={handleCanvasMouseMove}
-                onMouseUp={handleCanvasMouseUp}
-                onMouseLeave={() => {
+                // {{ Replaced mouse events with pointer events for better mobile support }}
+                onPointerDown={handleCanvasMouseDown}
+                onPointerMove={handleCanvasMouseMove}
+                onPointerUp={handleCanvasMouseUp}
+                onPointerLeave={() => {
                   handleCanvasMouseUp();
                   drawCanvas();
                 }}
@@ -726,18 +727,20 @@ export default function CollaborativeArtCanvas() {
           >
             <div className="bg-[#1e45bb] rounded-lg shadow-lg overflow-hidden">
               <div className="tabs tabs-boxed bg-transparent">
-                <a
+                <button
                   className={`tab flex-1 ${activeTab === "color" ? "bg-blue-600 text-white" : "text-white"}`}
                   onClick={() => setActiveTab("color")}
+                  type="button" // Ensures the button behaves correctly in forms
                 >
                   Color
-                </a>
-                <a
+                </button>
+                <button
                   className={`tab flex-1 ${activeTab === "image" ? "bg-blue-600 text-white" : "text-white"}`}
                   onClick={() => setActiveTab("image")}
+                  type="button"
                 >
                   Image
-                </a>
+                </button>
               </div>
               <div className="p-4">
                 {activeTab === "color" && (
