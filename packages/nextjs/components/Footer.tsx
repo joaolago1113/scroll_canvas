@@ -17,7 +17,7 @@ export const Footer = () => {
             </div>
             <span>·</span>
             <div className="text-center">
-              <a href="x.com/zoomerfren" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+              <a href="https://x.com/zoomerfren" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
                 Support
               </a>
             </div>
