@@ -786,7 +786,7 @@ export default function CollaborativeArtCanvas() {
                             Apply Image
                           </button>
                         ) : (
-                          <p className="text-white mt-2">Select two corners on the canvas to position the image</p>
+                          <p className="text-white mt-2">Select two corners on the canvas to position the image (Dobule tap on mobile)</p>
                         )}
                       </div>
                     )}

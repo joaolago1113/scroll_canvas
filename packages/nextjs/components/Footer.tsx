@@ -11,13 +11,13 @@ export const Footer = () => {
             </div>
             <span>·</span>
             <div className="text-center">
-              <a href="https://collaborativeartcanvas.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+              <a href="https://scrollart.vercel.app/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
                 Official Website
               </a>
             </div>
             <span>·</span>
             <div className="text-center">
-              <a href="mailto:support@collaborativeartcanvas.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+              <a href="x.com/zoomerfren" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
                 Support
               </a>
             </div>
