@@ -1,5 +1,5 @@
 {
-  "name": "Scaffold-ETH 2 DApp",
-  "description": "A DApp built with Scaffold-ETH",
+  "name": "Collaborative Art Canvas",
+  "description": "Collaborative Art Canvas is a public, shared space on the Scroll mainnet where individuals can freely express themselves by drawing or placing images on a 64x64 pixel canvas. This can include anything from personal artwork to branded content, effectively turning the canvas into a dynamic advertisement as others view and interact with it. Anyone can draw on the canvas and even paint over existing images. Once 10 million pixels have been painted, the canvas will be permanently preserved, capturing a collective snapshot of creativity and expression.",
   "iconPath": "logo.svg"
 }

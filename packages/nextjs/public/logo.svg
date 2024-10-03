@@ -6,6 +6,4 @@
   <polygon points="51.5,20 70,50 51.5,80 33,50" fill="#61dafb"/>
   <circle cx="51.5" cy="50" r="15" fill="#ffffff"/>
   
-  <!-- Optional text -->
-  <text x="51.5" y="95" text-anchor="middle" fill="#ffffff" font-size="14" font-family="Arial" dy=".3em">My Logo</text>
 </svg>
