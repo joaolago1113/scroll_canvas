@@ -13,6 +13,9 @@ packages/hardhat/.env
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+packages/nextjs/.yarn/
+packages/nextjs/.next/
+packages/hardhat/.yarn/
 
 # eslint
 .eslintcache
