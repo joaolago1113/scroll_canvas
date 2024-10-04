@@ -875,15 +875,13 @@ export default function CollaborativeArtCanvas() {
                         </Dialog.Title>
                         <div className="mt-2">
                           <p className="text-sm text-base-content opacity-80">
-                            1. Select a color or upload an image.
+                            1. Either paint directly onto the canvas or upload an image of your choice.
                             <br />
-                            2. Click on the canvas to paint pixels.
+                            2. Purchase pixels to claim your space on the canvas.
                             <br />
-                            3. Use the select tool to choose multiple pixels.
+                            3. A total of 10 million pixels are available on the 64x64 canvas. Once they're all painted, the canvas becomes immutable.
                             <br />
-                            4. Purchase pixels to own them on the blockchain.
-                            <br />
-                            5. Collaborate with others to create amazing art!
+                            4. Join forces with other artists to produce spectacular collective art!
                           </p>
                         </div>
 
