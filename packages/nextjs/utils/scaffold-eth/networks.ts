@@ -13,7 +13,6 @@ export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
 
 // Mapping of chainId to RPC chain name an format followed by alchemy and infura
 export const RPC_CHAIN_NAMES: Record<number, string> = {
-  [chains.mainnet.id]: "eth-mainnet",
   [chains.goerli.id]: "eth-goerli",
   [chains.sepolia.id]: "eth-sepolia",
   [chains.optimism.id]: "opt-mainnet",
