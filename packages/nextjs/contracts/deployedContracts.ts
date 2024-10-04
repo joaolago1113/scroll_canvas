@@ -1117,7 +1117,7 @@ const deployedContracts = {
       },
     },
     PaintToken: {
-      address: "0xe3273BA7e684D41b0f20FD5fdc64585832b136F2",
+      address: "0xF243B5515b866E0a2a130864aBf2dc39f76132cf",
       abi: [
         {
           inputs: [
